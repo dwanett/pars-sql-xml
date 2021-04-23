@@ -168,13 +168,13 @@ int main(int argc, char **argv)
 	doc = xmlNewDoc(BAD_CAST "1.0");
 	root_node = xmlNewNode(NULL, BAD_CAST "Data_base");
 	xmlDocSetRootElement(doc, root_node);
-	table_name = PQexec(conn, "SELECT table_name FROM information_schema.tables  where table_schema='test'");
+	table_name = PQexec(conn, "SELECT table_name FROM information_schema.tables  where table_schema='power_grid'");
 	check_error(table_name, conn);
 	count_str = PQntuples(table_name);
 	while (count_str-- > 0)
 	{
 		name_table = PQgetvalue(table_name, count_str, 0);
-		tmp = ft_strjoin("SELECT * FROM \"test\".\"", name_table);
+		tmp = ft_strjoin("SELECT * FROM \"power_grid\".\"", name_table);
 		if (tmp == NULL)
 			return (-1);
 		zapros = ft_strjoin(tmp, "\"");
