@@ -140,6 +140,7 @@ void send_insert(t_list **list, PGconn *conn)
 			check_error(res, conn, PGRES_COMMAND_OK);
 			free(full_insert);
 			(*list)->insert = (*list)->insert->next;
+			PQclear(res);
 		}
 		(*list)->insert = tmp_ins;
 		*list = (*list)->next;
