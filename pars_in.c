@@ -1,115 +1,202 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <postgresql/libpq-fe.h>
-#include <libxml2/libxml/parser.h>
-#include <libxml2/libxml/tree.h>
+#include "header.h"
 
-void exit_nicely(PGconn *conn)
+void	save_table_name(t_list **list, xmlNode *cur_node)
 {
-	PQfinish(conn);
-	exit(1);
-}
+	xmlChar *flag;
+	t_list *new_table;
+	t_list *head;
 
-void check_error(PGresult *check, PGconn *conn)
-{
-	if (PQresultStatus(check) != PGRES_TUPLES_OK)
+	flag = xmlGetProp(cur_node, (const xmlChar *)"object");
+	if (flag != NULL)
 	{
-		fprintf(stderr, "SET failed: %s", PQerrorMessage(conn));
-		PQclear(check);
-		exit_nicely(conn);
-	}
-}
-
-PGconn *connect_db(const char *conninfo)
-{
-	PGconn *conn;
-
-	conn = PQconnectdb(conninfo);
-	if (PQstatus(conn) != CONNECTION_OK)
-	{
-		fprintf(stderr, "Connection to database failed: %s",
-				PQerrorMessage(conn));
-		exit_nicely(conn);
-	}
-	return (conn);
-}
-
-char	*ft_strjoin(char *s1, char *s2)
-{
-	char	*str;
-	int		i;
-	int		j;
-	int		k;
-
-	i = 0;
-	j = 0;
-	k = 0;
-	str = (char*)malloc(sizeof(char) * (strlen(s1) + strlen(s2) + 1));
-	if (str == NULL)
-		return (NULL);
-	while (s2[j] != '\0' || s1[k] != '\0')
-	{
-		if (s1[k] != '\0')
-			str[i] = s1[k++];
+		new_table = (t_list*)malloc(sizeof(t_list));
+		new_table->table = ft_strjoin((char *) cur_node->name, "", 1);
+		new_table->insert = NULL;
+		new_table->next = NULL;
+		if (*list == NULL)
+			*list = new_table;
 		else
-			str[i] = s2[j++];
-		i++;
+		{
+			head = *list;
+			while ((*list)->next != NULL)
+				*list = (*list)->next;
+			(*list)->next = new_table;
+			*list = head;
+		}
 	}
-	str[i] = '\0';
-	return (str);
+	xmlFree(flag);
 }
 
-void	print_element_names(xmlNode *a_node, char **head, PGconn *conn)
+void save_insert(t_list **list, xmlNode *cur_node, char *content, xmlChar *type)
+{
+	t_list_ins *new_insert;
+	t_list_ins *head_insert;
+
+	if ((*list)->insert == NULL || (*list)->end_insert == 1)
+	{
+		new_insert = (t_list_ins*)malloc(sizeof(t_list_ins));
+		new_insert->insert_str = ft_strjoin("INSERT INTO \"power_grid\".\"", (*list)->table, 1);
+		new_insert->insert_str = ft_strjoin(new_insert->insert_str, "\" (\"", 0);
+		new_insert->insert_str = ft_strjoin(new_insert->insert_str, (char *)cur_node->name, 0);
+		new_insert->insert_str = ft_strjoin(new_insert->insert_str, "\" ", 0);
+		new_insert->values = ft_strjoin("VALUES (", content, 1);
+		new_insert->next = NULL;
+		if ((*list)->insert != NULL)
+		{
+			head_insert = (*list)->insert;
+			while ((*list)->insert->next != NULL)
+				(*list)->insert = (*list)->insert->next;
+			(*list)->insert->next = new_insert;
+			(*list)->insert = head_insert;
+		}
+		else
+			(*list)->insert = new_insert;
+		(*list)->end_insert = 0;
+	}
+	else
+	{
+		head_insert = (*list)->insert;
+		while ((*list)->insert->next != NULL)
+			(*list)->insert = (*list)->insert->next;
+		(*list)->insert->insert_str = ft_strjoin((*list)->insert->insert_str, ", \"", 0);
+		(*list)->insert->insert_str = ft_strjoin((*list)->insert->insert_str, (char *)cur_node->name, 0);
+		(*list)->insert->insert_str = ft_strjoin((*list)->insert->insert_str, "\" ", 0);
+		(*list)->insert->values = ft_strjoin((*list)->insert->values , ", ", 0);
+		if (*content == '\0')
+			(*list)->insert->values = ft_strjoin((*list)->insert->values , "0", 0);
+		else
+		{
+			if (!strcmp((char *) type, "point"))
+			{
+				(*list)->insert->values = ft_strjoin(
+						(*list)->insert->values, "'", 0);
+				(*list)->insert->values = ft_strjoin(
+						(*list)->insert->values, content, 0);
+				(*list)->insert->values = ft_strjoin(
+						(*list)->insert->values, "'", 0);
+			}
+			else
+				(*list)->insert->values = ft_strjoin(
+						(*list)->insert->values, content, 0);
+		}
+		(*list)->insert = head_insert;
+	}
+	if (cur_node->next->next == NULL)
+	{
+		head_insert = (*list)->insert;
+		while ((*list)->insert->next != NULL)
+			(*list)->insert = (*list)->insert->next;
+		(*list)->insert->insert_str = ft_strjoin((*list)->insert->insert_str, ")", 0);
+		(*list)->insert->values = ft_strjoin((*list)->insert->values , ");", 0);
+		(*list)->end_insert = 1;
+		(*list)->insert = head_insert;
+	}
+}
+
+void	create_list_insert(xmlNode *a_node, t_list **list)
 {
 	xmlNode *cur_node;
-	xmlChar *tmp;
-	xmlChar *flag;
+	xmlChar *type;
+	t_list *head;
 	char *content;
 
 	for (cur_node = a_node; cur_node; cur_node = cur_node->next)
 	{
-		flag = xmlGetProp(cur_node, (const xmlChar *)"object");
-		if (flag != NULL)
-		{
-			if (*head)
-				free(*head);
-			*head = ft_strjoin((char *) cur_node->name, "");
-		}
-		xmlFree(flag);
+		save_table_name(list, cur_node);
 		if (cur_node->type == XML_ELEMENT_NODE)
 		{
-			tmp = xmlGetProp(cur_node, (const xmlChar *)"type");
+			type = xmlGetProp(cur_node, (const xmlChar *)"type");
 			content = (char *)xmlNodeGetContent(cur_node);
-			xmlFree(tmp);
+			if (content != NULL && *content != '\n')
+			{
+				head = *list;
+				while ((*list)->next != NULL)
+					*list = (*list)->next;
+				save_insert(list, cur_node, content, type);
+				*list = head;
+			}
+			xmlFree(type);
 			free(content);
 		}
-		print_element_names(cur_node->children, head, conn);
+		create_list_insert(cur_node->children, list);
 	}
 }
 
+void send_insert(t_list **list, PGconn *conn)
+{
+	t_list *tmp;
+	t_list_ins *tmp_ins;
+	char *full_insert;
+	PGresult *res;
+
+	tmp = (*list);
+	while ((*list)->next != NULL)
+	{
+		tmp_ins = (*list)->insert;
+		while ((*list)->insert->next != NULL)
+		{
+			full_insert = ft_strjoin((*list)->insert->insert_str, (*list)->insert->values, 1);
+			res = PQexec(conn, full_insert);
+			check_error(res, conn);
+			free(full_insert);
+			(*list)->insert = (*list)->insert->next;
+		}
+		(*list)->insert = tmp_ins;
+		*list = (*list)->next;
+	}
+	*list = tmp;
+}
+
+void free_list(t_list **list)
+{
+	t_list *tmp;
+	t_list_ins *tmp_ins;
+
+	while (*list != NULL)
+	{
+		tmp = (*list)->next;
+		free((*list)->table);
+		while ((*list)->insert != NULL)
+		{
+			tmp_ins = (*list)->insert->next;
+			free((*list)->insert->insert_str);
+			free((*list)->insert->values);
+			free((*list)->insert);
+			(*list)->insert = tmp_ins;
+		}
+		free(*list);
+		*list = tmp;
+	}
+}
 
 int	main(int argc, char **argv)
 {
 	PGconn *conn;
 	xmlDoc *doc;
 	xmlNode *root_element;
-	char *head;
+	t_list *list;
 
 	doc = NULL;
-	head = NULL;
 	root_element = NULL;
+	list = NULL;
 	if (argc != 2)
-		return(1);
+	{
+		fprintf(stderr,"Error: Enter file name\n");
+		return (0);
+	}
 	doc = xmlReadFile(argv[1], NULL, 0);
 	if (doc == NULL)
-		printf("error: could not parse file %s\n", argv[1]);
+	{
+		fprintf(stderr, "Error: could not parse file %s\n", argv[1]);
+		return (0);
+	}
 	conn = connect_db("host=127.0.0.1 user=postgres password=3954 dbname=diplom");
 	root_element = xmlDocGetRootElement(doc);
-	print_element_names(root_element, &head, conn);
-	free(head);
+	create_list_insert(root_element, &list);
+	send_insert(&list, conn);
+	free_list(&list);
 	PQfinish(conn);
 	xmlFreeDoc(doc);
 	xmlCleanupParser();
-	return 0;
+	return (0);
 }

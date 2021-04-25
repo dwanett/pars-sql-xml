@@ -1,20 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Data_base>
-  <T_substation object="table">
-    <row>
-      <id_TP type="int4">1</id_TP>
-      <total_power_of_consumers type="int4">1</total_power_of_consumers>
-      <transformer_power type="int4">1</transformer_power>
-      <electrical_reliability type="int4">1</electrical_reliability>
-      <coordinates type="point">(1,1)</coordinates>
-    </row>
-  </T_substation>
-  <D_substation object="table">
-    <row>
-      <id_RP type="int4">1</id_RP>
-      <coordinates type="point">(2,1)</coordinates>
-    </row>
-  </D_substation>
   <Cable_line object="table">
     <row>
       <id_cable type="int4">1</id_cable>
@@ -39,6 +24,21 @@
       <id_TP_in type="int4">1</id_TP_in>
     </row>
   </Cable_line>
+  <T_substation object="table">
+    <row>
+      <id_TP type="int4">1</id_TP>
+      <total_power_of_consumers type="int4">1</total_power_of_consumers>
+      <transformer_power type="int4">1</transformer_power>
+      <electrical_reliability type="int4">1</electrical_reliability>
+      <coordinates type="point">(1,1)</coordinates>
+    </row>
+  </T_substation>
+  <D_substation object="table">
+    <row>
+      <id_RP type="int4">1</id_RP>
+      <coordinates type="point">(2,1)</coordinates>
+    </row>
+  </D_substation>
   <Diesel_generator object="table">
     <row>
       <id_DGU type="int4">1</id_DGU>
