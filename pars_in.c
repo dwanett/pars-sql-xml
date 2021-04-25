@@ -7,7 +7,7 @@ void	save_table_name(t_list **list, xmlNode *cur_node)
 	t_list *head;
 
 	flag = xmlGetProp(cur_node, (const xmlChar *)"object");
-	if (flag != NULL)
+	if (flag != NULL && cur_node->children != NULL)
 	{
 		new_table = (t_list*)malloc(sizeof(t_list));
 		new_table->table = ft_strjoin((char *) cur_node->name, "", 1);
@@ -63,7 +63,7 @@ void save_insert(t_list **list, xmlNode *cur_node, char *content, xmlChar *type)
 		(*list)->insert->insert_str = ft_strjoin((*list)->insert->insert_str, "\" ", 0);
 		(*list)->insert->values = ft_strjoin((*list)->insert->values , ", ", 0);
 		if (*content == '\0')
-			(*list)->insert->values = ft_strjoin((*list)->insert->values , "0", 0);
+			(*list)->insert->values = ft_strjoin((*list)->insert->values , "NULL", 0);
 		else
 		{
 			if (!strcmp((char *) type, "point"))
@@ -86,7 +86,7 @@ void save_insert(t_list **list, xmlNode *cur_node, char *content, xmlChar *type)
 		head_insert = (*list)->insert;
 		while ((*list)->insert->next != NULL)
 			(*list)->insert = (*list)->insert->next;
-		(*list)->insert->insert_str = ft_strjoin((*list)->insert->insert_str, ")", 0);
+		(*list)->insert->insert_str = ft_strjoin((*list)->insert->insert_str, ") ", 0);
 		(*list)->insert->values = ft_strjoin((*list)->insert->values , ");", 0);
 		(*list)->end_insert = 1;
 		(*list)->insert = head_insert;
@@ -107,7 +107,7 @@ void	create_list_insert(xmlNode *a_node, t_list **list)
 		{
 			type = xmlGetProp(cur_node, (const xmlChar *)"type");
 			content = (char *)xmlNodeGetContent(cur_node);
-			if (content != NULL && *content != '\n')
+			if (content != NULL && *content != '\n' && *list)
 			{
 				head = *list;
 				while ((*list)->next != NULL)
@@ -130,14 +130,14 @@ void send_insert(t_list **list, PGconn *conn)
 	PGresult *res;
 
 	tmp = (*list);
-	while ((*list)->next != NULL)
+	while (*list != NULL)
 	{
 		tmp_ins = (*list)->insert;
-		while ((*list)->insert->next != NULL)
+		while ((*list)->insert != NULL)
 		{
 			full_insert = ft_strjoin((*list)->insert->insert_str, (*list)->insert->values, 1);
 			res = PQexec(conn, full_insert);
-			check_error(res, conn);
+			check_error(res, conn, PGRES_COMMAND_OK);
 			free(full_insert);
 			(*list)->insert = (*list)->insert->next;
 		}

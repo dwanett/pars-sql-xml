@@ -24,7 +24,7 @@ typedef struct 			s_list
 
 char					*ft_strjoin(char *s1, char *s2, int con);
 PGconn					*connect_db(const char *conninfo);
-void					check_error(PGresult *check, PGconn *conn);
+void					check_error(PGresult *check, PGconn *connm, ExecStatusType def);
 void					exit_nicely(PGconn *conn);
 
 #endif

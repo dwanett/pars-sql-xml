@@ -1,9 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <postgresql/libpq-fe.h>
-#include <libxml2/libxml/parser.h>
-#include <libxml2/libxml/tree.h>
+#include "header.h"
 
 char	*ft_malc(int n, int i)
 {
@@ -107,33 +102,38 @@ int main(int argc, char **argv)
 	xmlDocPtr doc = NULL;
 	xmlNodePtr root_node = NULL;
 	int count_str;
+	int str;
 	char *name_table;
 	char *zapros;
-	char *tmp;
 
+	str = 0;
 	conn = connect_db("host=127.0.0.1 user=postgres password=3954 dbname=diplom");
 	doc = xmlNewDoc(BAD_CAST "1.0");
 	root_node = xmlNewNode(NULL, BAD_CAST "Data_base");
 	xmlDocSetRootElement(doc, root_node);
 	table_name = PQexec(conn, "SELECT table_name FROM information_schema.tables  where table_schema='power_grid'");
-	check_error(table_name, conn);
+	check_error(table_name, conn, PGRES_TUPLES_OK);
 	count_str = PQntuples(table_name);
-	while (count_str-- > 0)
+	while (str < count_str)
 	{
-		name_table = PQgetvalue(table_name, count_str, 0);
-		tmp = ft_strjoin("SELECT * FROM \"power_grid\".\"", name_table, 1);
-		if (tmp == NULL)
+		name_table = PQgetvalue(table_name, str, 0);
+		zapros = ft_strjoin("SELECT * FROM \"power_grid\".\"", name_table, 1);
+		if (zapros == NULL)
 			return (-1);
-		zapros = ft_strjoin(tmp, "\"", 0);
+		zapros = ft_strjoin(zapros, "\"", 0);
 		if (zapros == NULL)
 			return (-1);
 		res = PQexec(conn, zapros);
-		check_error(res, conn);
+		check_error(res, conn, PGRES_TUPLES_OK);
 		create_xmldoc(res, root_node, name_table, conn);
 		PQclear(res);
 		free(zapros);
+		str++;
 	}
-	xmlSaveFormatFileEnc("result.xml", doc, "UTF-8", 1);
+	if (argc == 2)
+		xmlSaveFormatFileEnc(argv[1], doc, "UTF-8", 1);
+	else
+		xmlSaveFormatFileEnc("result.xml", doc, "UTF-8", 1);
 	xmlFreeDoc(doc);
 	xmlCleanupParser();
 	xmlMemoryDump();

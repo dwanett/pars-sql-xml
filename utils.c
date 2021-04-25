@@ -6,9 +6,9 @@ void exit_nicely(PGconn *conn)
 	exit(1);
 }
 
-void check_error(PGresult *check, PGconn *conn)
+void check_error(PGresult *check, PGconn *conn, ExecStatusType def)
 {
-	if (PQresultStatus(check) != PGRES_TUPLES_OK)
+	if (PQresultStatus(check) != def)
 	{
 		fprintf(stderr, "SET failed: %s", PQerrorMessage(conn));
 		PQclear(check);
