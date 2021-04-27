@@ -101,6 +101,7 @@ int main(int argc, char **argv)
 	PGresult *table_name;
 	xmlDocPtr doc = NULL;
 	xmlNodePtr root_node = NULL;
+	xmlNodePtr node = NULL;
 	int count_str;
 	int str;
 	char *name_table;
@@ -109,8 +110,13 @@ int main(int argc, char **argv)
 	str = 0;
 	conn = connect_db("host=127.0.0.1 user=postgres password=3954 dbname=diplom");
 	doc = xmlNewDoc(BAD_CAST "1.0");
-	root_node = xmlNewNode(NULL, BAD_CAST "Data_base");
+	node = xmlNewDocPI(doc, (xmlChar*)"iec61970-552", (xmlChar*)"version=\"2.0\"");
+	xmlDocSetRootElement(doc, node);
+	root_node = xmlNewNode(NULL, BAD_CAST "rdf:RDF");
 	xmlDocSetRootElement(doc, root_node);
+	xmlNewProp(root_node, BAD_CAST "xmlns:rdf", BAD_CAST "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
+	xmlNewProp(root_node, BAD_CAST "xmlns:cim", BAD_CAST "http://www.iec.ch/TC57/2004/CIM-schema-cim10#");
+	root_node = xmlNewChild(root_node, NULL, BAD_CAST "Data_base", NULL);
 	table_name = PQexec(conn, "SELECT table_name FROM information_schema.tables  where table_schema='power_grid'");
 	check_error(table_name, conn, PGRES_TUPLES_OK);
 	count_str = PQntuples(table_name);
