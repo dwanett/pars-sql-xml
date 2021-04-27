@@ -9,6 +9,8 @@ char	*ft_malc(int n, int i)
 		return (NULL);
 	if (n < 0)
 		*result = '-';
+	else
+		*result = '+';
 	result[i] = '\0';
 	return (result);
 }
@@ -47,10 +49,12 @@ char	*ft_itoa(int n)
 	if (result == NULL)
 		return (NULL);
 	i -= 1;
-	while (i >= 0 && result[i] != '-')
+	while (i >= 0)
 	{
 		result[i--] = 48 + ((n % 10) * minus);
 		n /= 10;
+		if (result[i] == '-')
+			break ;
 	}
 	return (result);
 }

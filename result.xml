@@ -41,7 +41,7 @@
         <id_RP_out type="int4">1</id_RP_out>
         <id_TP_out type="int4"/>
         <id_RP_in type="int4"/>
-        <id_TP_in type="">1</id_TP_in>
+        <id_TP_in type="int4">1</id_TP_in>
       </row>
     </Cable_line>
   </Data_base>
