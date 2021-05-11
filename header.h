@@ -1,13 +1,18 @@
 #ifndef HEADER_H
 # define HEADER_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <postgresql/libpq-fe.h>
-#include <libxml2/libxml/parser.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <string.h>
 
-typedef struct 			s_list_ins
+# ifdef __APPLE__
+# include </usr/local/opt/libpq/include/libpq-fe.h>
+# include </usr/local/include/libxml2/libxml/parser.h>
+# else
+# include <postgresql/libpq-fe.h>
+# include <libxml2/libxml/parser.h>
+# endif
+typedef struct s_list_ins
 {
 	char				*insert_str;
 	char				*values;

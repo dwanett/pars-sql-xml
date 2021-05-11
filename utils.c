@@ -10,7 +10,7 @@ void check_error(PGresult *check, PGconn *conn, ExecStatusType def)
 {
 	if (PQresultStatus(check) != def)
 	{
-		fprintf(stderr, "SET failed: %s", PQerrorMessage(conn));
+		fprintf(stderr, "SET failed: %s\n", PQerrorMessage(conn));
 		PQclear(check);
 		exit_nicely(conn);
 	}
@@ -23,7 +23,7 @@ PGconn *connect_db(const char *conninfo)
 	conn = PQconnectdb(conninfo);
 	if (PQstatus(conn) != CONNECTION_OK)
 	{
-		fprintf(stderr, "Connection to database failed");
+		fprintf(stderr, "Connection to database failed\n");
 		exit_nicely(conn);
 	}
 	return (conn);
