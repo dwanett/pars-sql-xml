@@ -1,10 +1,13 @@
 #include "header.h"
 
-void	save_table_name(t_list **list, xmlNode *cur_node)
+void	save_table_name(t_list **list, xmlNode *cur_node, PGconn *conn)
 {
 	xmlChar *flag;
 	t_list *new_table;
 	t_list *head;
+	PGresult *FK;
+	const char* paramValues[1];
+	char *tmp;
 
 	flag = xmlGetProp(cur_node, (const xmlChar *)"object");
 	if (flag != NULL && cur_node->children != NULL)
@@ -13,6 +16,17 @@ void	save_table_name(t_list **list, xmlNode *cur_node)
 		new_table->table = ft_strjoin((char *) cur_node->name, "", 1);
 		new_table->insert = NULL;
 		new_table->next = NULL;
+		paramValues[0] = new_table->table;
+		FK = PQexecParams(conn, "SELECT contype FROM \"pg_catalog\".\"pg_constraint\" WHERE contype = 'f' AND conrelid = (SELECT oid FROM pg_class WHERE relname = $1) GROUP BY contype",
+				1, 0, paramValues, 0, 0, 0);
+		if (PQntuples(FK) == 1)
+		{
+			tmp = PQgetvalue(FK, 0, 0);
+			if (tmp && *tmp == 'f')
+				new_table->have_FK = 1;
+		}
+		else
+			new_table->have_FK = 0;
 		if (*list == NULL)
 			*list = new_table;
 		else
@@ -23,6 +37,7 @@ void	save_table_name(t_list **list, xmlNode *cur_node)
 			(*list)->next = new_table;
 			*list = head;
 		}
+		PQclear(FK);
 	}
 	xmlFree(flag);
 }
@@ -93,7 +108,7 @@ void save_insert(t_list **list, xmlNode *cur_node, char *content, xmlChar *type)
 	}
 }
 
-void	create_list_insert(xmlNode *a_node, t_list **list)
+void	create_list_insert(xmlNode *a_node, t_list **list, PGconn *conn)
 {
 	xmlNode *cur_node;
 	xmlChar *type;
@@ -102,7 +117,7 @@ void	create_list_insert(xmlNode *a_node, t_list **list)
 
 	for (cur_node = a_node; cur_node; cur_node = cur_node->next)
 	{
-		save_table_name(list, cur_node);
+		save_table_name(list, cur_node, conn);
 		if (cur_node->type == XML_ELEMENT_NODE)
 		{
 			type = xmlGetProp(cur_node, (const xmlChar *)"type");
@@ -118,31 +133,36 @@ void	create_list_insert(xmlNode *a_node, t_list **list)
 			xmlFree(type);
 			free(content);
 		}
-		create_list_insert(cur_node->children, list);
+		create_list_insert(cur_node->children, list, conn);
 	}
 }
 
-void send_insert(t_list **list, PGconn *conn)
+
+void send_insert(t_list **list, PGconn *conn, int check_fk)
 {
 	t_list *tmp;
 	t_list_ins *tmp_ins;
 	char *full_insert;
 	PGresult *res;
 
-	tmp = (*list);
+	tmp = *list;
 	while (*list != NULL)
 	{
-		tmp_ins = (*list)->insert;
-		while ((*list)->insert != NULL)
+		if ((*list)->have_FK == check_fk)
 		{
-			full_insert = ft_strjoin((*list)->insert->insert_str, (*list)->insert->values, 1);
-			res = PQexec(conn, full_insert);
-			check_error(res, conn, PGRES_COMMAND_OK);
-			free(full_insert);
-			(*list)->insert = (*list)->insert->next;
-			PQclear(res);
+			tmp_ins = (*list)->insert;
+			while ((*list)->insert != NULL)
+			{
+				full_insert = ft_strjoin((*list)->insert->insert_str,
+						(*list)->insert->values, 1);
+				res = PQexec(conn, full_insert);
+				check_error(res, conn, PGRES_COMMAND_OK);
+				free(full_insert);
+				(*list)->insert = (*list)->insert->next;
+				PQclear(res);
+			}
+			(*list)->insert = tmp_ins;
 		}
-		(*list)->insert = tmp_ins;
 		*list = (*list)->next;
 	}
 	*list = tmp;
@@ -193,8 +213,9 @@ int	main(int argc, char **argv)
 	}
 	conn = connect_db("host=127.0.0.1 user=postgres password=3954 dbname=diplom");
 	root_element = xmlDocGetRootElement(doc);
-	create_list_insert(root_element, &list);
-	send_insert(&list, conn);
+	create_list_insert(root_element, &list, conn);
+	send_insert(&list, conn, 0);
+	send_insert(&list, conn, 1);
 	free_list(&list);
 	PQfinish(conn);
 	xmlFreeDoc(doc);

@@ -24,6 +24,7 @@ typedef struct 			s_list
 	char 				*table;
 	t_list_ins			*insert;
 	int 				end_insert;
+	int 				have_FK;
 	struct s_list		*next;
 }						t_list;
 

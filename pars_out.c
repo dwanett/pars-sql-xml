@@ -121,7 +121,7 @@ int main(int argc, char **argv)
 	xmlNewProp(root_node, BAD_CAST "xmlns:rdf", BAD_CAST "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
 	xmlNewProp(root_node, BAD_CAST "xmlns:cim", BAD_CAST "http://www.iec.ch/TC57/2004/CIM-schema-cim10#");
 	root_node = xmlNewChild(root_node, NULL, BAD_CAST "Data_base", NULL);
-	table_name = PQexec(conn, "SELECT table_name FROM information_schema.tables  where table_schema='power_grid'");
+	table_name = PQexec(conn, "SELECT table_name FROM information_schema.tables where table_schema='power_grid'");
 	check_error(table_name, conn, PGRES_TUPLES_OK);
 	count_str = PQntuples(table_name);
 	while (str < count_str)
