@@ -60,17 +60,20 @@ char	*ft_itoa(int n)
 }
 
 
+
 void create_xmldoc(PGresult *res, xmlNodePtr root_node, char *name_table, PGconn *conn)
 {
 	xmlNodePtr	node;
 	xmlNodePtr	node1;
 	PGresult 	*cim_model_table;
 	PGresult 	*cim_model_column;
-	PGresult 	*cim_model_node;
+	PGresult 	*cim_model_nodes;
 	char *name_table_in_cim;
 	char *name_column_in_cim;
-	char *name_node_in_cim;
+	t_cim_model *nodes;
+	t_cim_model *tmp;
 	char *summ_str;
+	char *tmp_class;
 	const char* paramValues[2];
 	int size_stolb;
 	int size_str;
@@ -83,7 +86,7 @@ void create_xmldoc(PGresult *res, xmlNodePtr root_node, char *name_table, PGconn
 
 	node = NULL;
 	node1 = NULL;
-	m = 0;
+	nodes = NULL;
 	size_stolb = PQnfields(res);
 	size_str = PQntuples(res);
 	paramValues[0] = name_table;
@@ -95,13 +98,12 @@ void create_xmldoc(PGresult *res, xmlNodePtr root_node, char *name_table, PGconn
 		name_table_in_cim = PQgetvalue(cim_model_table, 0, 0);
 		for (i = 0; i < size_str; i++)
 		{
-			summ_str = ft_strjoin("cim:", name_table_in_cim, 1);
-			node = xmlNewChild(root_node, NULL, BAD_CAST summ_str, NULL);
-			free(summ_str);
+			node = xmlNewChild(root_node, NULL, BAD_CAST name_table_in_cim, NULL);
 			xmlNewProp(node, BAD_CAST "rdf:about",
 					BAD_CAST PQgetvalue(res, i, 0));
 			for (j = 1; j < size_stolb; j++)
 			{
+				m = 0;
 				paramValues[1] = PQfname(res, j);
 				cim_model_column = PQexecParams(conn, "SELECT name_in_cim_model FROM \"power_grid\".\"Сonformity_column\" WHERE \"name_column\" = $2 AND \"name_table\" = $1",
 						2, 0, paramValues, 0, 0, 0);
@@ -109,37 +111,52 @@ void create_xmldoc(PGresult *res, xmlNodePtr root_node, char *name_table, PGconn
 				if (PQntuples(cim_model_column) != 0)
 				{
 					name_column_in_cim = PQgetvalue(cim_model_column, 0, 0);
-					cim_model_node = PQexecParams(conn, "SELECT attributes, class FROM \"Cim_model_nodes\" WHERE \"name_in_cim\" = $1",
-							2, 0, (const char**)name_column_in_cim, 0, 0, 0);
-					check_error(cim_model_node, conn, PGRES_TUPLES_OK);
-					if (PQntuples(cim_model_node) != 0)
+					cim_model_nodes = PQexecParams(conn, "SELECT attributes, class FROM \"power_grid\".\"Cim_model_nodes\" WHERE \"name_in_cim\" = $1",
+							1, 0, &name_column_in_cim, 0, 0, 0);
+					check_error(cim_model_nodes, conn, PGRES_TUPLES_OK);
+					if ((n = PQntuples(cim_model_nodes)) != 0)
 					{
-						n = PQnfields(cim_model_node);
-						while (m != n)
+						while (m < n)
 						{
-							name_node_in_cim = PQgetvalue(cim_model_node, m, 0);
-
+							tmp = (t_cim_model*)malloc(sizeof(t_cim_model));
+							tmp->attributes = PQgetvalue(cim_model_nodes, m, 0);
+							tmp->class = PQgetvalue(cim_model_nodes, m, 1);
+							tmp->next = nodes;
+							nodes = tmp;
 							m++;
 						}
 					}
 					else
 					{
-						summ_str = ft_strjoin("cim:", name_column_in_cim, 1);
-						node1 = xmlNewChild(node, NULL, BAD_CAST summ_str,
+						node1 = xmlNewChild(node, NULL, BAD_CAST name_column_in_cim,
 								BAD_CAST PQgetvalue(res, i, j));
-						free(summ_str);
 					}
 				}
-				else
-				{
-					//--------------------Временно---------------------------
-					node1 = xmlNewChild(node, NULL, BAD_CAST paramValues[1],
-							BAD_CAST PQgetvalue(res, i, j));
-					xmlNewProp(node1, BAD_CAST "ВНИМАНИЕ",
-							BAD_CAST "нет в соответствия");
-					//--------------------Временно---------------------------
-				}
 				PQclear(cim_model_column);
+			}
+			tmp = nodes;
+			while (nodes != NULL)
+			{
+				node = xmlNewChild(root_node, NULL, BAD_CAST nodes->class,
+						NULL);
+				xmlNewProp(node, BAD_CAST "rdf:about",
+						BAD_CAST nodes->class);
+				node1 = xmlNewChild(node, NULL,
+						BAD_CAST nodes->attributes,
+						NULL);
+				xmlNewProp(node1, BAD_CAST "rdf:resource",
+						BAD_CAST nodes->attributes);
+				tmp_class = nodes->class;
+				nodes = nodes->next;
+				while (nodes != NULL && strcmp(tmp_class, nodes->class) == 0)
+				{
+					node1 = xmlNewChild(node, NULL,
+							BAD_CAST nodes->attributes,
+							NULL);
+					xmlNewProp(node1, BAD_CAST "rdf:resource",
+							BAD_CAST nodes->attributes);
+					nodes = nodes->next;
+				}
 			}
 		}
 	}

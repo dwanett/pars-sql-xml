@@ -12,10 +12,23 @@
     <md:Model.profile>http://</md:Model.profile>
     <cim:Substation rdf:about="149903b4-0448-40f8-9e00-1ba2f90d66dd">
       <cim:Naming.name>ТП15357</cim:Naming.name>
-      <cim:pnom>1</cim:pnom>
-      <cim:ratedMVA>1</cim:ratedMVA>
       <cim:Naming.description>1</cim:Naming.description>
-      <coordinates ВНИМАНИЕ="нет в соответствия">(1,1)</coordinates>
     </cim:Substation>
+    <cim:TransformerWinding rdf:about="cim:TransformerWinding">
+      <cim:TransformerWinding.MemberOf_PowerTransformer rdf:resource="cim:TransformerWinding.MemberOf_PowerTransformer"/>
+      <cim:TransformerWinding.ratedKV rdf:resource="cim:TransformerWinding.ratedKV"/>
+      <cim:TransformerWinding.ratedMVA rdf:resource="cim:TransformerWinding.ratedMVA"/>
+      <cim:TransformerWinding.windingType rdf:resource="cim:TransformerWinding.windingType"/>
+    </cim:TransformerWinding>
+    <cim:PowerTransformer rdf:about="cim:PowerTransformer">
+      <cim:PowerTransformer.MemberOf_Substation rdf:resource="cim:PowerTransformer.MemberOf_Substation"/>
+    </cim:PowerTransformer>
+    <cim:LoadArea rdf:about="cim:LoadArea">
+      <cim:LoadArea.Substation rdf:resource="cim:LoadArea.Substation"/>
+      <cim:LoadArea.EnergyConsumer rdf:resource="cim:LoadArea.EnergyConsumer"/>
+    </cim:LoadArea>
+    <cim:EnergyConsumer rdf:about="cim:EnergyConsumer">
+      <cim:EnergyConsumer.pnom rdf:resource="cim:EnergyConsumer.pnom"/>
+    </cim:EnergyConsumer>
   </md:FullModel>
 </rdf:RDF>

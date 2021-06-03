@@ -14,12 +14,19 @@
 # include <postgresql/libpq-fe.h>
 # include <libxml2/libxml/parser.h>
 # endif
-typedef struct s_list_ins
+typedef struct			s_list_ins
 {
 	char				*insert_str;
 	char				*values;
 	struct s_list_ins	*next;
 }						t_list_ins;
+
+typedef struct			s_cim_model
+{
+	char				*attributes;
+	char				*class;
+	struct s_cim_model	*next;
+}						t_cim_model;
 
 typedef struct 			s_list
 {
