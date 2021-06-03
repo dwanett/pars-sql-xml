@@ -1,48 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?iec61970-552 version="2.0"?>
-<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:cim="http://www.iec.ch/TC57/2004/CIM-schema-cim10#">
-  <Data_base>
-    <D_substation object="table">
-      <row>
-        <id_RP type="int4">1</id_RP>
-        <coordinates type="point">(1,1)</coordinates>
-      </row>
-    </D_substation>
-    <T_substation object="table">
-      <row>
-        <id_TP type="int4">1</id_TP>
-        <total_power_of_consumers type="int4">1</total_power_of_consumers>
-        <transformer_power type="int4">1</transformer_power>
-        <electrical_reliability type="int4">1</electrical_reliability>
-        <coordinates type="point">(1,1)</coordinates>
-      </row>
-    </T_substation>
-    <Platform_DGU object="table">
-      <row>
-        <id_platform type="int4">1</id_platform>
-        <coordinates type="point">(1,1)</coordinates>
-      </row>
-    </Platform_DGU>
-    <Diesel_generator object="table">
-      <row>
-        <id_DGU type="int4">1</id_DGU>
-        <power type="int4">1</power>
-        <coordinates type="point">(1,1)</coordinates>
-        <id_platform type="int4">1</id_platform>
-      </row>
-    </Diesel_generator>
-    <Cable_line object="table">
-      <row>
-        <id_cable type="int4">1</id_cable>
-        <length type="int4">1</length>
-        <section type="int4">1</section>
-        <transmitted_power type="int4">2</transmitted_power>
-        <bandwidth type="int4">2</bandwidth>
-        <id_RP_out type="int4">1</id_RP_out>
-        <id_TP_out type="int4"/>
-        <id_RP_in type="int4"/>
-        <id_TP_in type="int4">1</id_TP_in>
-      </row>
-    </Cable_line>
-  </Data_base>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:cim="http://www.iec.ch/TC57/2004/CIM-schema-cim10#" xmlns:md="http://www.iec.ch/TC57/61970-552/ModelDescription/1#" xml:base="urn:uuid:">
+  <md:FullModel rdf:about="model-uri">
+    <md:Model.created>2008-12-24</md:Model.created>
+    <md:Model.scenarioTime>2021-06-04</md:Model.scenarioTime>
+    <md:Model.Supersedes rdf:resource="urn:uuid:*-*-*-*-*"/>
+    <md:Model.DependentOn rdf:resource="urn:uuid:*-*-*-*-*"/>
+    <md:Model.version>32</md:Model.version>
+    <md:Model.modelingAuthoritySet>http://</md:Model.modelingAuthoritySet>
+    <md:Model.description>description</md:Model.description>
+    <md:Model.profile>http://</md:Model.profile>
+    <cim:Substation rdf:about="149903b4-0448-40f8-9e00-1ba2f90d66dd">
+      <cim:Naming.name>ТП15357</cim:Naming.name>
+      <cim:pnom>1</cim:pnom>
+      <cim:ratedMVA>1</cim:ratedMVA>
+      <cim:Naming.description>1</cim:Naming.description>
+      <coordinates ВНИМАНИЕ="нет в соответствия">(1,1)</coordinates>
+    </cim:Substation>
+  </md:FullModel>
 </rdf:RDF>

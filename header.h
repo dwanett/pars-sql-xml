@@ -4,6 +4,8 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
+# include <time.h>
+# include <uuid/uuid.h>
 
 # ifdef __APPLE__
 # include </usr/local/opt/libpq/include/libpq-fe.h>
