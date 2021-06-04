@@ -59,9 +59,7 @@ char	*ft_itoa(int n)
 	return (result);
 }
 
-
-
-void create_xmldoc(PGresult *res, xmlNodePtr root_node, char *name_table, PGconn *conn)
+/*void create_xmldoc(PGresult *res, xmlNodePtr root_node, char *name_table, PGconn *conn)
 {
 	xmlNodePtr	node;
 	xmlNodePtr	node1;
@@ -104,59 +102,195 @@ void create_xmldoc(PGresult *res, xmlNodePtr root_node, char *name_table, PGconn
 			for (j = 1; j < size_stolb; j++)
 			{
 				m = 0;
-				paramValues[1] = PQfname(res, j);
-				cim_model_column = PQexecParams(conn, "SELECT name_in_cim_model FROM \"power_grid\".\"Сonformity_column\" WHERE \"name_column\" = $2 AND \"name_table\" = $1",
-						2, 0, paramValues, 0, 0, 0);
-				check_error(cim_model_column, conn, PGRES_TUPLES_OK);
-				if (PQntuples(cim_model_column) != 0)
+				name_column_in_cim = PQfname(res, j);
+				cim_model_nodes = PQexecParams(conn, "SELECT attributes, class FROM \"power_grid\".\"Cim_model_nodes\" WHERE \"name_column\" = $1",
+						1, 0, &name_column_in_cim, 0, 0, 0);
+				check_error(cim_model_nodes, conn, PGRES_TUPLES_OK);
+				if ((n = PQntuples(cim_model_nodes)) != 0)
 				{
-					name_column_in_cim = PQgetvalue(cim_model_column, 0, 0);
-					cim_model_nodes = PQexecParams(conn, "SELECT attributes, class FROM \"power_grid\".\"Cim_model_nodes\" WHERE \"name_in_cim\" = $1",
-							1, 0, &name_column_in_cim, 0, 0, 0);
-					check_error(cim_model_nodes, conn, PGRES_TUPLES_OK);
-					if ((n = PQntuples(cim_model_nodes)) != 0)
+					while (m < n)
 					{
-						while (m < n)
-						{
-							tmp = (t_cim_model*)malloc(sizeof(t_cim_model));
-							tmp->attributes = PQgetvalue(cim_model_nodes, m, 0);
-							tmp->class = PQgetvalue(cim_model_nodes, m, 1);
-							tmp->next = nodes;
-							nodes = tmp;
-							m++;
-						}
-					}
-					else
-					{
-						node1 = xmlNewChild(node, NULL, BAD_CAST name_column_in_cim,
-								BAD_CAST PQgetvalue(res, i, j));
+						tmp = (t_cim_model*)malloc(sizeof(t_cim_model));
+						tmp->attributes = PQgetvalue(cim_model_nodes, m, 0);
+						tmp->class = PQgetvalue(cim_model_nodes, m, 1);
+						tmp->value = PQgetvalue(res, i, j);
+						tmp->root_node = node;
+						tmp->next = nodes;
+						nodes = tmp;
+						m++;
 					}
 				}
-				PQclear(cim_model_column);
 			}
 			tmp = nodes;
 			while (nodes != NULL)
 			{
-				node = xmlNewChild(root_node, NULL, BAD_CAST nodes->class,
-						NULL);
-				xmlNewProp(node, BAD_CAST "rdf:about",
-						BAD_CAST nodes->class);
-				node1 = xmlNewChild(node, NULL,
-						BAD_CAST nodes->attributes,
-						NULL);
-				xmlNewProp(node1, BAD_CAST "rdf:resource",
-						BAD_CAST nodes->attributes);
-				tmp_class = nodes->class;
+				if (*nodes->class != '\0')
+				{
+					node = xmlNewChild(root_node, NULL, BAD_CAST nodes->class,
+							NULL);
+					xmlNewProp(node, BAD_CAST "rdf:about",
+							BAD_CAST nodes->class);
+					node1 = xmlNewChild(node, NULL,
+							BAD_CAST nodes->attributes,
+							NULL);
+					xmlNewProp(node1, BAD_CAST "rdf:resource",
+							BAD_CAST nodes->attributes);
+					tmp_class = nodes->class;
+				}
+				else
+				{
+					node1 = xmlNewChild(nodes->root_node, NULL,
+							BAD_CAST nodes->attributes,
+							nodes->value);
+				}
 				nodes = nodes->next;
 				while (nodes != NULL && strcmp(tmp_class, nodes->class) == 0)
 				{
 					node1 = xmlNewChild(node, NULL,
 							BAD_CAST nodes->attributes,
 							NULL);
-					xmlNewProp(node1, BAD_CAST "rdf:resource",
-							BAD_CAST nodes->attributes);
+					xmlNewProp(node1, BAD_CAST NULL,
+							BAD_CAST NULL);
 					nodes = nodes->next;
 				}
+			}
+			nodes = tmp;
+		}
+	}
+	PQclear(cim_model_table);
+}*/
+
+void free_nodes(t_cim_model **nodes)
+{
+	t_cim_model *tmp;
+
+	while (*nodes != NULL)
+	{
+		tmp = *nodes;
+		*nodes = (*nodes)->next;
+		if (tmp->uuid != NULL && *tmp->uuid != '\0')
+			free(tmp->uuid);
+		free(tmp);
+	}
+}
+
+void create_xmldoc(PGresult *res, xmlNodePtr root_node, char *name_table, PGconn *conn)
+{
+	xmlNodePtr	node;
+	xmlNodePtr	node_table;
+	xmlNodePtr	node1;
+	PGresult 	*cim_model_table;
+	PGresult 	*cim_model_nodes;
+	char *name_table_in_cim;
+	char *name_column_in_cim;
+	t_cim_model *nodes;
+	t_cim_model *tmp;
+	char *tmp_class;
+	char *resurce_or_value;
+	const char* paramValues[2];
+	int size_stolb;
+	int size_str;
+	int i;
+	int j;
+	int n;
+	int m;
+	uuid_t uid;
+	char *root_uuid;
+	char *save_uuid;
+
+	node = NULL;
+	node_table = NULL;
+	nodes = NULL;
+	save_uuid = NULL;
+	size_stolb = PQnfields(res);
+	size_str = PQntuples(res);
+	paramValues[0] = name_table;
+	cim_model_table = PQexecParams(conn, "SELECT path_to_object_in_cim FROM \"power_grid\".\"Сonformity_table\" WHERE \"name_table_in_bd\" = $1",
+			1, 0, paramValues, 0, 0, 0);
+	check_error(cim_model_table, conn, PGRES_TUPLES_OK);
+	if (PQntuples(cim_model_table) != 0)
+	{
+		name_table_in_cim = PQgetvalue(cim_model_table, 0, 0);
+		for (i = 0; i < size_str; i++)
+		{
+			root_uuid = PQgetvalue(res, i, 0);
+			node_table = xmlNewChild(root_node, NULL, BAD_CAST name_table_in_cim, NULL);
+			xmlNewProp(node_table, BAD_CAST "rdf:about",
+					BAD_CAST root_uuid);
+			for (j = 1; j < size_stolb; j++)
+			{
+				m = 0;
+				tmp_class = NULL;
+				name_column_in_cim = PQfname(res, j);
+				cim_model_nodes = PQexecParams(conn, "SELECT attributes, class, resurce_or_value FROM \"power_grid\".\"Cim_model_nodes\" WHERE \"name_column\" = $1 ORDER BY \"class\";",
+						1, 0, &name_column_in_cim, 0, 0, 0);
+				check_error(cim_model_nodes, conn, PGRES_TUPLES_OK);
+				if ((n = PQntuples(cim_model_nodes)) != 0)
+				{
+					while (m < n)
+					{
+						tmp = (t_cim_model*)malloc(sizeof(t_cim_model));
+						tmp->attributes = PQgetvalue(cim_model_nodes, m, 0);
+						tmp->class = PQgetvalue(cim_model_nodes, m, 1);
+						resurce_or_value = PQgetvalue(cim_model_nodes, m, 2);
+						tmp->resource = resurce_or_value;
+						if (*resurce_or_value ==  '1' || *resurce_or_value ==  '4')
+							tmp->value = PQgetvalue(res, i, j);
+						else
+							tmp->value = NULL;
+						if (*tmp->class == '\0')
+						{
+							xmlNewChild(node_table, NULL,
+									BAD_CAST tmp->attributes,
+									tmp->value);
+							free(tmp);
+							break ;
+						}
+						if (tmp_class != NULL && strcmp(tmp_class, tmp->class) == 0)
+							tmp->root_node = node;
+						else
+						{
+							uuid_generate(uid);
+							tmp->uuid = (char*)malloc(sizeof(char) * 37);
+							uuid_unparse(uid, tmp->uuid);
+							if (*resurce_or_value == '4' || *resurce_or_value == '5')
+							{
+								save_uuid = (char*)malloc(sizeof(char) * 37);
+								uuid_unparse(uid, save_uuid);
+							}
+							node = xmlNewChild(root_node, NULL,
+									BAD_CAST tmp->class,
+									NULL);
+							xmlNewProp(node, BAD_CAST "rdf:about",
+									BAD_CAST tmp->uuid);
+							tmp->root_node = node;
+							tmp_class = tmp->class;
+						}
+						tmp->next = nodes;
+						nodes = tmp;
+						m++;
+					}
+					tmp = nodes;
+					while (nodes != NULL)
+					{
+						node1 = xmlNewChild(nodes->root_node, NULL,
+									BAD_CAST nodes->attributes,
+									nodes->value);
+						if (*nodes->resource ==  '0')
+						{
+							xmlNewProp(node1, BAD_CAST "rdf:resource",
+									BAD_CAST save_uuid);
+							free(save_uuid);
+						}
+						if (*nodes->resource == '3' || *nodes->resource == '5')
+							xmlNewProp(node1, BAD_CAST "rdf:resource",
+									BAD_CAST root_uuid);
+						nodes = nodes->next;
+					}
+					nodes = tmp;
+					free_nodes(&nodes);
+				}
+				PQclear(cim_model_nodes);
 			}
 		}
 	}

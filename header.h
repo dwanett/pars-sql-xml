@@ -25,6 +25,11 @@ typedef struct			s_cim_model
 {
 	char				*attributes;
 	char				*class;
+	char				*value;
+	char				*uuid;
+	char 				*resource;
+	xmlNodePtr			node_uuid;
+	xmlNodePtr			root_node;
 	struct s_cim_model	*next;
 }						t_cim_model;
 
