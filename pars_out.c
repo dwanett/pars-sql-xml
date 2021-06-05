@@ -130,6 +130,7 @@ char *split_coordinates(char *full_coordinates, char type)
 	}
 	return (coordinates);
 }
+/*
 
 void create_xmldoc(PGresult *res, xmlNodePtr root_node, char *name_table, PGconn *conn)
 {
@@ -142,6 +143,7 @@ void create_xmldoc(PGresult *res, xmlNodePtr root_node, char *name_table, PGconn
 	char *name_column_in_cim;
 	t_cim_model *nodes;
 	t_cim_model *tmp;
+	t_cim_model *save;
 	char *tmp_class;
 	char *resurce_or_value;
 	const char* paramValues[2];
@@ -204,12 +206,17 @@ void create_xmldoc(PGresult *res, xmlNodePtr root_node, char *name_table, PGconn
 							tmp->yPosition = split_coordinates(tmp->value, 'y');
 						if (*tmp->class == '\0')
 						{
-							xmlNewChild(node_table, NULL,
+							node1 = xmlNewChild(node_table, NULL,
 									BAD_CAST tmp->attributes,
 									tmp->value);
+							if (*resurce_or_value == '0')
+								xmlNewProp(node1, BAD_CAST "rdf:resource",
+										BAD_CAST save->uuid);
 							free(tmp);
 							break ;
 						}
+						if (*resurce_or_value == '0')
+							save = tmp;
 						if (tmp_class != NULL && strcmp(tmp_class, tmp->class) == 0)
 							tmp->root_node = node;
 						else
@@ -217,10 +224,10 @@ void create_xmldoc(PGresult *res, xmlNodePtr root_node, char *name_table, PGconn
 							uuid_generate(uid);
 							tmp->uuid = (char*)malloc(sizeof(char) * 37);
 							uuid_unparse(uid, tmp->uuid);
-							if (*resurce_or_value == '4' || *resurce_or_value == '5')
+							if (*resurce_or_value == '4' || *resurce_or_value == '5' || *resurce_or_value == '7')
 							{
-								save_uuid = (char*)malloc(sizeof(char) * 37);
-								uuid_unparse(uid, save_uuid);
+								save->uuid = (char*)malloc(sizeof(char) * 37);
+								uuid_unparse(uid, save->uuid);
 							}
 							node = xmlNewChild(root_node, NULL,
 									BAD_CAST tmp->class,
@@ -235,7 +242,8 @@ void create_xmldoc(PGresult *res, xmlNodePtr root_node, char *name_table, PGconn
 						m++;
 					}
 					tmp = nodes;
-					while (nodes != NULL)
+					*/
+/*while (nodes != NULL)
 					{
 						if (nodes->xPosition != NULL)
 						{
@@ -259,7 +267,7 @@ void create_xmldoc(PGresult *res, xmlNodePtr root_node, char *name_table, PGconn
 							xmlNewProp(node1, BAD_CAST "rdf:resource",
 									BAD_CAST nodes->value);
 						}
-						else
+						else if (*nodes->resource != '7')
 							node1 = xmlNewChild(nodes->root_node, NULL,
 									BAD_CAST nodes->attributes,
 									nodes->value);
@@ -272,6 +280,140 @@ void create_xmldoc(PGresult *res, xmlNodePtr root_node, char *name_table, PGconn
 						if (*nodes->resource == '3' || *nodes->resource == '5')
 							xmlNewProp(node1, BAD_CAST "rdf:resource",
 									BAD_CAST root_uuid);
+						nodes = nodes->next;
+					}*//*
+
+					nodes = tmp;
+					free_nodes(&nodes);
+				}
+				PQclear(cim_model_nodes);
+			}
+		}
+	}
+	PQclear(cim_model_table);
+}
+*/
+
+void create_xmldoc(PGresult *res, xmlNodePtr root_node, char *name_table, PGconn *conn)
+{
+	xmlNodePtr	node;
+	xmlNodePtr	node_table;
+	xmlNodePtr	node1;
+	PGresult 	*cim_model_table;
+	PGresult 	*cim_model_nodes;
+	char *name_table_in_cim;
+	char *name_column_in_cim;
+	t_cim_model *nodes;
+	t_cim_model *tmp;
+	t_cim_model *tmp2;
+	t_cim_model *save;
+	char *tmp_class;
+	char *resurce_or_value;
+	const char* paramValues[2];
+	int size_stolb;
+	int size_str;
+	int i;
+	int j;
+	int n;
+	int m;
+	uuid_t uid;
+	char *root_uuid;
+	char *save_uuid;
+
+	node = NULL;
+	node_table = NULL;
+	nodes = NULL;
+	save_uuid = NULL;
+	size_stolb = PQnfields(res);
+	size_str = PQntuples(res);
+	paramValues[0] = name_table;
+	cim_model_table = PQexecParams(conn, "SELECT path_to_object_in_cim FROM \"power_grid\".\"Сonformity_table\" WHERE \"name_table_in_bd\" = $1",
+			1, 0, paramValues, 0, 0, 0);
+	check_error(cim_model_table, conn, PGRES_TUPLES_OK);
+	if (PQntuples(cim_model_table) != 0)
+	{
+		name_table_in_cim = PQgetvalue(cim_model_table, 0, 0);
+		for (i = 0; i < size_str; i++)
+		{
+			root_uuid = PQgetvalue(res, i, 0);
+			node_table = xmlNewChild(root_node, NULL, BAD_CAST name_table_in_cim, NULL);
+			xmlNewProp(node_table, BAD_CAST "rdf:about",
+					BAD_CAST root_uuid);
+			for (j = 1; j < size_stolb; j++)
+			{
+				m = 0;
+				tmp_class = NULL;
+				tmp = NULL;
+				name_column_in_cim = PQfname(res, j);
+				cim_model_nodes = PQexecParams(conn, "SELECT attributes, class, resurce_or_value, link_source, const_value FROM \"power_grid\".\"Cim_model_nodes\" WHERE \"name_column\" = $1 ORDER BY \"class\";",
+						1, 0, &name_column_in_cim, 0, 0, 0);
+				check_error(cim_model_nodes, conn, PGRES_TUPLES_OK);
+				if ((n = PQntuples(cim_model_nodes)) != 0)
+				{
+					while (m < n)
+					{
+						tmp = (t_cim_model*)malloc(sizeof(t_cim_model));
+						tmp->class = PQgetvalue(cim_model_nodes, m, 1);
+						tmp->attributes = PQgetvalue(cim_model_nodes, m, 0);
+						tmp->resource = PQgetvalue(cim_model_nodes, m, 2);
+						tmp->next = nodes;
+						tmp->value = NULL;
+						if (*tmp->resource == '4' || *tmp->resource == '1')
+							tmp->value = PQgetvalue(res, i, j);
+						if (*tmp->resource == '2')
+							tmp->value = PQgetvalue(cim_model_nodes, m, 4);
+						if (*tmp->resource == '6')
+							tmp->resource_class = PQgetvalue(cim_model_nodes, m, 4);
+						if (*tmp->class == '\0')
+							tmp->node_class = node_table;
+						else if (tmp_class != NULL && strcmp(tmp_class, tmp->class) == 0)
+							tmp->node_class = node;
+						else
+						{
+							uuid_generate(uid);
+							tmp->uuid = (char*)malloc(sizeof(char) * 37);
+							uuid_unparse(uid, tmp->uuid);
+							node = xmlNewChild(root_node, NULL, BAD_CAST tmp->class, NULL);
+							xmlNewProp(node, BAD_CAST "rdf:about",
+									BAD_CAST tmp->uuid);
+							tmp->node_class = node;
+							tmp_class = tmp->class;
+						}
+						if (*tmp->resource == '0')
+							tmp->resource_class = PQgetvalue(cim_model_nodes, m, 3);
+						nodes = tmp;
+						m++;
+					}
+					tmp = nodes;
+					while (nodes != NULL)
+					{
+						if (*nodes->resource == '4' || *nodes->resource == '7' || *nodes->resource == '5')
+						{
+							tmp2 = nodes;
+							tmp_class = nodes->class;
+							save_uuid = nodes->uuid;
+							nodes = tmp;
+							while (nodes != NULL)
+							{
+								if (*nodes->resource == '0' && strcmp(tmp_class, nodes->resource_class) == 0)
+									nodes->resource_class = save_uuid;
+								nodes = nodes->next;
+							}
+							nodes = tmp2;
+						}
+						if (*nodes->resource == '3' || *nodes->resource == '5')
+							nodes->resource_class = root_uuid;
+						nodes = nodes->next;
+					}
+					nodes = tmp;
+					tmp = nodes;
+					while (nodes != NULL)
+					{
+						if (*nodes->resource != '7')
+							node = xmlNewChild(nodes->node_class, NULL, BAD_CAST nodes->attributes,  nodes->value);
+						if (*nodes->resource == '0' || *nodes->resource == '3' || *nodes->resource == '6' || *nodes->resource == '5')
+							xmlNewProp(node, BAD_CAST "rdf:resource",
+								BAD_CAST nodes->resource_class);
 						nodes = nodes->next;
 					}
 					nodes = tmp;

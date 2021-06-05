@@ -29,15 +29,15 @@ typedef struct			s_cim_Location
 
 typedef struct			s_cim_model
 {
-	char				*attributes;
 	char				*class;
-	char				*value;
 	char				*uuid;
+	char				*attributes;
 	char 				*resource;
+	char 				*resource_class;
+	char				*value;
 	char				*xPosition;
 	char				*yPosition;
-	xmlNodePtr			node_uuid;
-	xmlNodePtr			root_node;
+	xmlNodePtr			node_class;
 	struct s_cim_model	*next;
 }						t_cim_model;
 
