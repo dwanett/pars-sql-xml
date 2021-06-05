@@ -35,8 +35,7 @@ typedef struct			s_cim_model
 	char 				*resource;
 	char 				*resource_class;
 	char				*value;
-	char				*xPosition;
-	char				*yPosition;
+	int					Position;
 	xmlNodePtr			node_class;
 	struct s_cim_model	*next;
 }						t_cim_model;

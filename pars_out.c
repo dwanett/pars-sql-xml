@@ -96,6 +96,8 @@ void free_nodes(t_cim_model **nodes)
 	{
 		tmp = *nodes;
 		*nodes = (*nodes)->next;
+		if (tmp->Position == 1)
+			free(tmp->value);
 		if (tmp->uuid != NULL && *tmp->uuid != '\0')
 		{
 			free(tmp->uuid);
@@ -130,169 +132,6 @@ char *split_coordinates(char *full_coordinates, char type)
 	}
 	return (coordinates);
 }
-/*
-
-void create_xmldoc(PGresult *res, xmlNodePtr root_node, char *name_table, PGconn *conn)
-{
-	xmlNodePtr	node;
-	xmlNodePtr	node_table;
-	xmlNodePtr	node1;
-	PGresult 	*cim_model_table;
-	PGresult 	*cim_model_nodes;
-	char *name_table_in_cim;
-	char *name_column_in_cim;
-	t_cim_model *nodes;
-	t_cim_model *tmp;
-	t_cim_model *save;
-	char *tmp_class;
-	char *resurce_or_value;
-	const char* paramValues[2];
-	int size_stolb;
-	int size_str;
-	int i;
-	int j;
-	int n;
-	int m;
-	uuid_t uid;
-	char *root_uuid;
-	char *save_uuid;
-
-	node = NULL;
-	node_table = NULL;
-	nodes = NULL;
-	save_uuid = NULL;
-	size_stolb = PQnfields(res);
-	size_str = PQntuples(res);
-	paramValues[0] = name_table;
-	cim_model_table = PQexecParams(conn, "SELECT path_to_object_in_cim FROM \"power_grid\".\"Сonformity_table\" WHERE \"name_table_in_bd\" = $1",
-			1, 0, paramValues, 0, 0, 0);
-	check_error(cim_model_table, conn, PGRES_TUPLES_OK);
-	if (PQntuples(cim_model_table) != 0)
-	{
-		name_table_in_cim = PQgetvalue(cim_model_table, 0, 0);
-		for (i = 0; i < size_str; i++)
-		{
-			root_uuid = PQgetvalue(res, i, 0);
-			node_table = xmlNewChild(root_node, NULL, BAD_CAST name_table_in_cim, NULL);
-			xmlNewProp(node_table, BAD_CAST "rdf:about",
-					BAD_CAST root_uuid);
-			for (j = 1; j < size_stolb; j++)
-			{
-				m = 0;
-				tmp_class = NULL;
-				name_column_in_cim = PQfname(res, j);
-				cim_model_nodes = PQexecParams(conn, "SELECT attributes, class, resurce_or_value, const_value FROM \"power_grid\".\"Cim_model_nodes\" WHERE \"name_column\" = $1 ORDER BY \"class\";",
-						1, 0, &name_column_in_cim, 0, 0, 0);
-				check_error(cim_model_nodes, conn, PGRES_TUPLES_OK);
-				if ((n = PQntuples(cim_model_nodes)) != 0)
-				{
-					while (m < n)
-					{
-						tmp = (t_cim_model*)malloc(sizeof(t_cim_model));
-						tmp->attributes = PQgetvalue(cim_model_nodes, m, 0);
-						tmp->class = PQgetvalue(cim_model_nodes, m, 1);
-						resurce_or_value = PQgetvalue(cim_model_nodes, m, 2);
-						tmp->resource = resurce_or_value;
-						tmp->xPosition = NULL;
-						tmp->yPosition = NULL;
-						tmp->value = NULL;
-						if (*resurce_or_value ==  '2' || *resurce_or_value ==  '6')
-							tmp->value = PQgetvalue(cim_model_nodes, m, 3);
-						else if (*resurce_or_value ==  '1' || *resurce_or_value ==  '4')
-							tmp->value = PQgetvalue(res, i, j);
-						if (strcmp(tmp->attributes, "cim:PositionPoint.xPosition") == 0)
-							tmp->xPosition = split_coordinates(tmp->value, 'x');
-						if (strcmp(tmp->attributes, "cim:PositionPoint.yPosition") == 0)
-							tmp->yPosition = split_coordinates(tmp->value, 'y');
-						if (*tmp->class == '\0')
-						{
-							node1 = xmlNewChild(node_table, NULL,
-									BAD_CAST tmp->attributes,
-									tmp->value);
-							if (*resurce_or_value == '0')
-								xmlNewProp(node1, BAD_CAST "rdf:resource",
-										BAD_CAST save->uuid);
-							free(tmp);
-							break ;
-						}
-						if (*resurce_or_value == '0')
-							save = tmp;
-						if (tmp_class != NULL && strcmp(tmp_class, tmp->class) == 0)
-							tmp->root_node = node;
-						else
-						{
-							uuid_generate(uid);
-							tmp->uuid = (char*)malloc(sizeof(char) * 37);
-							uuid_unparse(uid, tmp->uuid);
-							if (*resurce_or_value == '4' || *resurce_or_value == '5' || *resurce_or_value == '7')
-							{
-								save->uuid = (char*)malloc(sizeof(char) * 37);
-								uuid_unparse(uid, save->uuid);
-							}
-							node = xmlNewChild(root_node, NULL,
-									BAD_CAST tmp->class,
-									NULL);
-							xmlNewProp(node, BAD_CAST "rdf:about",
-									BAD_CAST tmp->uuid);
-							tmp->root_node = node;
-							tmp_class = tmp->class;
-						}
-						tmp->next = nodes;
-						nodes = tmp;
-						m++;
-					}
-					tmp = nodes;
-					*/
-/*while (nodes != NULL)
-					{
-						if (nodes->xPosition != NULL)
-						{
-							node1 = xmlNewChild(nodes->root_node, NULL,
-									BAD_CAST nodes->attributes,
-									nodes->xPosition);
-							free(nodes->xPosition);
-						}
-						else if (nodes->yPosition != NULL)
-						{
-							node1 = xmlNewChild(nodes->root_node, NULL,
-									BAD_CAST nodes->attributes,
-									nodes->yPosition);
-							free(nodes->yPosition);
-						}
-						else if (*nodes->resource == '6')
-						{
-							node1 = xmlNewChild(nodes->root_node, NULL,
-									BAD_CAST nodes->attributes,
-									NULL);
-							xmlNewProp(node1, BAD_CAST "rdf:resource",
-									BAD_CAST nodes->value);
-						}
-						else if (*nodes->resource != '7')
-							node1 = xmlNewChild(nodes->root_node, NULL,
-									BAD_CAST nodes->attributes,
-									nodes->value);
-						if (*nodes->resource ==  '0')
-						{
-							xmlNewProp(node1, BAD_CAST "rdf:resource",
-									BAD_CAST save_uuid);
-							free(save_uuid);
-						}
-						if (*nodes->resource == '3' || *nodes->resource == '5')
-							xmlNewProp(node1, BAD_CAST "rdf:resource",
-									BAD_CAST root_uuid);
-						nodes = nodes->next;
-					}*//*
-
-					nodes = tmp;
-					free_nodes(&nodes);
-				}
-				PQclear(cim_model_nodes);
-			}
-		}
-	}
-	PQclear(cim_model_table);
-}
-*/
 
 void create_xmldoc(PGresult *res, xmlNodePtr root_node, char *name_table, PGconn *conn)
 {
@@ -358,10 +197,21 @@ void create_xmldoc(PGresult *res, xmlNodePtr root_node, char *name_table, PGconn
 						tmp->resource = PQgetvalue(cim_model_nodes, m, 2);
 						tmp->next = nodes;
 						tmp->value = NULL;
+						tmp->Position = 0;
 						if (*tmp->resource == '4' || *tmp->resource == '1')
 							tmp->value = PQgetvalue(res, i, j);
 						if (*tmp->resource == '2')
 							tmp->value = PQgetvalue(cim_model_nodes, m, 4);
+						if (strcmp(tmp->attributes, "cim:PositionPoint.xPosition") == 0)
+						{
+							tmp->value = split_coordinates(tmp->value, 'x');
+							tmp->Position = 1;
+						}
+						if (strcmp(tmp->attributes, "cim:PositionPoint.yPosition") == 0)
+						{
+							tmp->value = split_coordinates(tmp->value, 'y');
+							tmp->Position = 1;
+						}
 						if (*tmp->resource == '6')
 							tmp->resource_class = PQgetvalue(cim_model_nodes, m, 4);
 						if (*tmp->class == '\0')
