@@ -15,6 +15,35 @@ char	*ft_malc(int n, int i)
 	return (result);
 }
 
+size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
+{
+	size_t	len;
+	size_t	n;
+	int		i;
+	int		b;
+
+	len = 0;
+	i = 0;
+	b = 0;
+	if (!dst || !src)
+		return (0);
+	n = (size_t)strlen(src);
+	if (dst == NULL || dstsize == 0)
+		return (n);
+	if (dstsize != 0)
+	{
+		while (len < dstsize - 1)
+		{
+			if (src[b] == '\0')
+				break ;
+			dst[i++] = src[b++];
+			len++;
+		}
+		dst[i] = '\0';
+	}
+	return (n);
+}
+
 int		ft_chek(int tmp)
 {
 	int		i;
@@ -169,9 +198,38 @@ void free_nodes(t_cim_model **nodes)
 		tmp = *nodes;
 		*nodes = (*nodes)->next;
 		if (tmp->uuid != NULL && *tmp->uuid != '\0')
+		{
 			free(tmp->uuid);
+			tmp->uuid = NULL;
+		}
 		free(tmp);
+		tmp = NULL;
 	}
+}
+
+char *split_coordinates(char *full_coordinates, char type)
+{
+	int b;
+	char *coordinates;
+
+	b = 1;
+	while (full_coordinates[b] != ',')
+		b++;
+	if (type == 'x')
+	{
+		coordinates = (char*)malloc(sizeof(char) * b);
+		ft_strlcpy(coordinates, full_coordinates + 1, b);
+	}
+	if (type == 'y')
+	{
+		full_coordinates += b + 1;
+		b = 0;
+		while (full_coordinates[b + 1] != '\0')
+			b++;
+		coordinates = (char*)malloc(sizeof(char) * b + 1);
+		ft_strlcpy(coordinates, full_coordinates, b + 1);
+	}
+	return (coordinates);
 }
 
 void create_xmldoc(PGresult *res, xmlNodePtr root_node, char *name_table, PGconn *conn)
@@ -222,7 +280,7 @@ void create_xmldoc(PGresult *res, xmlNodePtr root_node, char *name_table, PGconn
 				m = 0;
 				tmp_class = NULL;
 				name_column_in_cim = PQfname(res, j);
-				cim_model_nodes = PQexecParams(conn, "SELECT attributes, class, resurce_or_value FROM \"power_grid\".\"Cim_model_nodes\" WHERE \"name_column\" = $1 ORDER BY \"class\";",
+				cim_model_nodes = PQexecParams(conn, "SELECT attributes, class, resurce_or_value, const_value FROM \"power_grid\".\"Cim_model_nodes\" WHERE \"name_column\" = $1 ORDER BY \"class\";",
 						1, 0, &name_column_in_cim, 0, 0, 0);
 				check_error(cim_model_nodes, conn, PGRES_TUPLES_OK);
 				if ((n = PQntuples(cim_model_nodes)) != 0)
@@ -234,10 +292,17 @@ void create_xmldoc(PGresult *res, xmlNodePtr root_node, char *name_table, PGconn
 						tmp->class = PQgetvalue(cim_model_nodes, m, 1);
 						resurce_or_value = PQgetvalue(cim_model_nodes, m, 2);
 						tmp->resource = resurce_or_value;
-						if (*resurce_or_value ==  '1' || *resurce_or_value ==  '4')
+						tmp->xPosition = NULL;
+						tmp->yPosition = NULL;
+						tmp->value = NULL;
+						if (*resurce_or_value ==  '2' || *resurce_or_value ==  '6')
+							tmp->value = PQgetvalue(cim_model_nodes, m, 3);
+						else if (*resurce_or_value ==  '1' || *resurce_or_value ==  '4')
 							tmp->value = PQgetvalue(res, i, j);
-						else
-							tmp->value = NULL;
+						if (strcmp(tmp->attributes, "cim:PositionPoint.xPosition") == 0)
+							tmp->xPosition = split_coordinates(tmp->value, 'x');
+						if (strcmp(tmp->attributes, "cim:PositionPoint.yPosition") == 0)
+							tmp->yPosition = split_coordinates(tmp->value, 'y');
 						if (*tmp->class == '\0')
 						{
 							xmlNewChild(node_table, NULL,
@@ -273,7 +338,30 @@ void create_xmldoc(PGresult *res, xmlNodePtr root_node, char *name_table, PGconn
 					tmp = nodes;
 					while (nodes != NULL)
 					{
-						node1 = xmlNewChild(nodes->root_node, NULL,
+						if (nodes->xPosition != NULL)
+						{
+							node1 = xmlNewChild(nodes->root_node, NULL,
+									BAD_CAST nodes->attributes,
+									nodes->xPosition);
+							free(nodes->xPosition);
+						}
+						else if (nodes->yPosition != NULL)
+						{
+							node1 = xmlNewChild(nodes->root_node, NULL,
+									BAD_CAST nodes->attributes,
+									nodes->yPosition);
+							free(nodes->yPosition);
+						}
+						else if (*nodes->resource == '6')
+						{
+							node1 = xmlNewChild(nodes->root_node, NULL,
+									BAD_CAST nodes->attributes,
+									NULL);
+							xmlNewProp(node1, BAD_CAST "rdf:resource",
+									BAD_CAST nodes->value);
+						}
+						else
+							node1 = xmlNewChild(nodes->root_node, NULL,
 									BAD_CAST nodes->attributes,
 									nodes->value);
 						if (*nodes->resource ==  '0')

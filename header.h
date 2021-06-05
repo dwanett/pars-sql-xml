@@ -21,6 +21,12 @@ typedef struct			s_list_ins
 	struct s_list_ins	*next;
 }						t_list_ins;
 
+typedef struct			s_cim_Location
+{
+	char				*xPosition;
+	char				*yPosition;
+}						t_cim_Location;
+
 typedef struct			s_cim_model
 {
 	char				*attributes;
@@ -28,6 +34,8 @@ typedef struct			s_cim_model
 	char				*value;
 	char				*uuid;
 	char 				*resource;
+	char				*xPosition;
+	char				*yPosition;
 	xmlNodePtr			node_uuid;
 	xmlNodePtr			root_node;
 	struct s_cim_model	*next;

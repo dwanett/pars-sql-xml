@@ -10,55 +10,74 @@
     <md:Model.modelingAuthoritySet>http://</md:Model.modelingAuthoritySet>
     <md:Model.description>description</md:Model.description>
     <md:Model.profile>http://</md:Model.profile>
-    <cim:Substation rdf:about="6c992a26-584d-4b47-8206-327dd944b156">
+
+    <!--...............................трансформаторная подстанция.....................начало..........-->
+    <cim:Substation rdf:about="2adbc6e6-d4b3-43ce-bf44-514f2e178a55"><!--ТП-->
       <cim:Naming.name>ТП15357</cim:Naming.name>
-      <cim:Naming.description>3</cim:Naming.description>
+      <cim:Naming.description>3</cim:Naming.description> <!--минимальная категория потребителей-->
     </cim:Substation>
-    <cim:EnergyConsumer rdf:about="7e43c303-2791-4a92-8971-6dc83ee6340a">
-      <cim:EnergyConsumer.pnom>1</cim:EnergyConsumer.pnom>
+
+    <cim:EnergyConsumer rdf:about="32d642cb-9f6a-4857-901a-d48801c505c1">
+      <cim:EnergyConsumer.pnom>1</cim:EnergyConsumer.pnom> <!--суммарная мощность потребителей-->
     </cim:EnergyConsumer>
-    <cim:LoadArea rdf:about="903648b5-677c-4b17-b7b7-faf72e6bc09b">
-      <cim:LoadArea.EnergyConsumer rdf:resource="7e43c303-2791-4a92-8971-6dc83ee6340a"/>
-      <cim:LoadArea.Substation rdf:resource="6c992a26-584d-4b47-8206-327dd944b156"/>
+
+    <cim:LoadArea rdf:about="2bcab799-21bb-4b82-af72-0befb2f616a8">
+      <cim:LoadArea.EnergyConsumer rdf:resource="32d642cb-9f6a-4857-901a-d48801c505c1"/>
+      <cim:LoadArea.Substation rdf:resource="2adbc6e6-d4b3-43ce-bf44-514f2e178a55"/>
     </cim:LoadArea>
-    <cim:PowerTransformer rdf:about="1ae49681-63f2-4875-bc46-661be87f9419">
-      <cim:PowerTransformer.MemberOf_Substation rdf:resource="6c992a26-584d-4b47-8206-327dd944b156"/>
+
+    <cim:PowerTransformer rdf:about="4a5d7386-5f3f-4ba9-822c-e080c21ae04b">
+      <cim:PowerTransformer.MemberOf_Substation rdf:resource="2adbc6e6-d4b3-43ce-bf44-514f2e178a55"/>
     </cim:PowerTransformer>
-    <cim:TransformerWinding rdf:about="e5b7b06b-9399-4a7d-ba90-c3e413972534">
-      <cim:TransformerWinding.ratedMVA/>
+
+    <cim:TransformerWinding rdf:about="fe5acb39-3093-4d90-82f9-33f09dc1803a">
       <cim:TransformerWinding.ratedKV>2</cim:TransformerWinding.ratedKV>
-      <cim:TransformerWinding.MemberOf_PowerTransformer rdf:resource="1ae49681-63f2-4875-bc46-661be87f9419"/>
-      <cim:TransformerWinding.windingType/>
+      <cim:TransformerWinding.MemberOf_PowerTransformer rdf:resource="4a5d7386-5f3f-4ba9-822c-e080c21ae04b"/>
+      <cim:TransformerWinding.windingType rdf:resource="http://iec.ch/TC57/2005/CIM-schema-cim10#WindingType.primary"/>
+      <cim:TransformerWinding.ratedMVA>10</cim:TransformerWinding.ratedMVA> <!--номинал установленного трансформатра-->
     </cim:TransformerWinding>
-    <cim:Location rdf:about="f5d8ed86-73a9-4a55-8e97-21aad391d3ae">
-      <cim:Location.PowerSystemResource rdf:resource="6c992a26-584d-4b47-8206-327dd944b156"/>
+
+    <cim:Location rdf:about="324a0344-b30e-4b05-b12f-456e97ff911c">
+      <cim:Location.PowerSystemResource rdf:resource="2adbc6e6-d4b3-43ce-bf44-514f2e178a55"/>
     </cim:Location>
-    <cim:PositionPoint rdf:about="638a4a10-51c5-4d16-a922-5a0d32a7c51d">
-      <cim:Location rdf:resource="f5d8ed86-73a9-4a55-8e97-21aad391d3ae"/>
-      <cim:PositionPoint.xPosition>(4,5)</cim:PositionPoint.xPosition>
-      <cim:PositionPoint.yPosition>(4,5)</cim:PositionPoint.yPosition>
+
+    <cim:PositionPoint rdf:about="0ac82d6c-b4c8-4578-8488-b7d00b8dc14e">
+      <cim:Location rdf:resource="324a0344-b30e-4b05-b12f-456e97ff911c"/>
+      <cim:PositionPoint.xPosition>455</cim:PositionPoint.xPosition><!--координаты ТП-->
+      <cim:PositionPoint.yPosition>5214</cim:PositionPoint.yPosition>
     </cim:PositionPoint>
-    <cim:Substation rdf:about="d9765168-2644-488e-80b6-3750d949a970">
+    <!--................................трансформаторная подстанция....................коенц...........-->
+
+    <!--...............................распределительная подстанция....................начало..........-->
+    <cim:Substation rdf:about="d9765168-2644-488e-80b6-3750d949a970"> <!--РП-->
       <cim:Naming.name>РП11111</cim:Naming.name>
     </cim:Substation>
-    <cim:Location rdf:about="7e6ec692-7255-4bc2-a05b-54beb1e034e0">
+
+    <cim:Location rdf:about="70966060-e92f-46af-b94d-967ffb48d8d5">
       <cim:Location.PowerSystemResource rdf:resource="d9765168-2644-488e-80b6-3750d949a970"/>
     </cim:Location>
-    <cim:PositionPoint rdf:about="f59a874c-c302-4e68-a2ac-25e4d84352fd">
-      <cim:Location rdf:resource="7e6ec692-7255-4bc2-a05b-54beb1e034e0"/>
-      <cim:PositionPoint.xPosition>(1,1)</cim:PositionPoint.xPosition>
-      <cim:PositionPoint.yPosition>(1,1)</cim:PositionPoint.yPosition>
+
+    <cim:PositionPoint rdf:about="a8238d89-2050-432c-9492-672485aa3f38"> <!--координаты РП-->
+      <cim:Location rdf:resource="70966060-e92f-46af-b94d-967ffb48d8d5"/>
+      <cim:PositionPoint.xPosition>1</cim:PositionPoint.xPosition>
+      <cim:PositionPoint.yPosition>1</cim:PositionPoint.yPosition>
     </cim:PositionPoint>
-    <cim:Substation rdf:about="06ca0de1-2395-431e-a9c4-8fd695f2f220">
+    <!--...............................распределительная подстанция.....................коенц...........-->
+
+    <!--...............................распределительная подстанция....................начало..........-->
+    <cim:Substation rdf:about="06ca0de1-2395-431e-a9c4-8fd695f2f220"> <!--РП-->
       <cim:Naming.name>РП22222</cim:Naming.name>
     </cim:Substation>
-    <cim:Location rdf:about="df976e5d-c2fe-467a-bc89-84e88a9ebcfd">
+
+    <cim:Location rdf:about="18e93307-cb39-41bd-b255-188bd6bbaf64">
       <cim:Location.PowerSystemResource rdf:resource="06ca0de1-2395-431e-a9c4-8fd695f2f220"/>
     </cim:Location>
-    <cim:PositionPoint rdf:about="74797d98-ff0b-47f9-82f8-00803ce0645c">
-      <cim:Location rdf:resource="df976e5d-c2fe-467a-bc89-84e88a9ebcfd"/>
-      <cim:PositionPoint.xPosition>(1,1)</cim:PositionPoint.xPosition>
-      <cim:PositionPoint.yPosition>(1,1)</cim:PositionPoint.yPosition>
+
+    <cim:PositionPoint rdf:about="8d9c2c77-153b-44d1-a607-043e24dc3847">
+      <cim:Location rdf:resource="18e93307-cb39-41bd-b255-188bd6bbaf64"/>
+      <cim:PositionPoint.xPosition>1</cim:PositionPoint.xPosition> <!--координаты РП-->
+      <cim:PositionPoint.yPosition>1</cim:PositionPoint.yPosition>
     </cim:PositionPoint>
+    <!--...............................распределительная подстанция.....................коенц...........-->
   </md:FullModel>
 </rdf:RDF>
