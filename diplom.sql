@@ -5,7 +5,7 @@
 -- Dumped from database version 13.2
 -- Dumped by pg_dump version 13.2
 
--- Started on 2021-06-06 14:27:37
+-- Started on 2021-06-06 18:21:57
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -88,8 +88,8 @@ CREATE TABLE power_grid."Cim_model_nodes" (
     attributes character varying(254) NOT NULL,
     class character varying(254),
     link_source character varying(254),
-    name_column character varying(254),
-    resurce_or_value character varying(254),
+    name_column character varying(254) NOT NULL,
+    resurce_or_value integer,
     const_value character varying(254)
 );
 
@@ -182,30 +182,38 @@ ALTER TABLE power_grid."Сonformity_table" OWNER TO postgres;
 -- Data for Name: Cim_model_nodes; Type: TABLE DATA; Schema: power_grid; Owner: postgres
 --
 
-INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:LoadArea.Substation', 'cim:LoadArea', NULL, 'total_power_of_consumers', '3', NULL);
-INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:EnergyConsumer.pnom', 'cim:EnergyConsumer', NULL, 'total_power_of_consumers', '4', NULL);
-INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:PowerTransformer.MemberOf_Substation', 'cim:PowerTransformer', NULL, 'transformer_power', '5', NULL);
-INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:Location.PowerSystemResource', 'cim:Location', NULL, 'coordinates', '5', NULL);
-INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:TransformerWinding.windingType', 'cim:TransformerWinding', NULL, 'transformer_power', '6', 'http://iec.ch/TC57/2005/CIM-schema-cim10#WindingType.primary');
-INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:Conductor.length', NULL, NULL, 'length', '1', NULL);
-INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:ConductorType', 'cim:ConductorType', NULL, 'section', '7', NULL);
-INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:WireType.radius', 'cim:WireType', NULL, 'section', '4', NULL);
-INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:PositionPoint.yPosition', 'cim:PositionPoint', NULL, 'coordinates', '1', NULL);
-INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:PositionPoint.xPosition', 'cim:PositionPoint', NULL, 'coordinates', '1', NULL);
-INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:Naming.name', NULL, NULL, 'name', '1', NULL);
-INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:Naming.description', NULL, NULL, 'electrical_reliability', '1', NULL);
-INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:WireArrangement.WireType', 'cim:WireArrangement', 'cim:WireType', 'section', '0', NULL);
-INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:WireArrangement.ConductorType', 'cim:WireArrangement', 'cim:ConductorType', 'section', '0', NULL);
-INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:TransformerWinding.MemberOf_PowerTransformer', 'cim:TransformerWinding', 'cim:PowerTransformer', 'transformer_power', '0', NULL);
-INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:Location', 'cim:PositionPoint', 'cim:Location', 'coordinates', '0', NULL);
-INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:Conductor.ConductorType', NULL, 'cim:ConductorType', 'section', '0', NULL);
-INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:LoadArea.EnergyConsumer', 'cim:LoadArea', 'cim:EnergyConsumer', 'total_power_of_consumers', '0', NULL);
-INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:ConductigEquipment.Terminals', NULL, 'cim:Terminal', 'transmitted_power', '0', NULL);
-INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:MeasurementValue.value', 'cim:MeasurementValue', NULL, 'transmitted_power', '4', NULL);
-INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:Measurment.Contain_MeasurementValues', 'cim:Measurment', 'cim:MeasurementValue', 'transmitted_power', '8', NULL);
-INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:Terminal.Measurments', 'cim:Terminal', 'cim:Measurment', 'transmitted_power', '8', NULL);
-INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:TransformerWinding.ratedKV', 'cim:TransformerWinding', NULL, 'transformer_power', '2', '10');
-INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:TransformerWinding.ratedMVA', 'cim:TransformerWinding', NULL, 'transformer_power', '1', NULL);
+INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:LoadArea.Substation', 'cim:LoadArea', NULL, 'total_power_of_consumers', 3, NULL);
+INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:EnergyConsumer.pnom', 'cim:EnergyConsumer', NULL, 'total_power_of_consumers', 4, NULL);
+INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:PowerTransformer.MemberOf_Substation', 'cim:PowerTransformer', NULL, 'transformer_power', 5, NULL);
+INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:Location.PowerSystemResource', 'cim:Location', NULL, 'coordinates', 5, NULL);
+INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:TransformerWinding.windingType', 'cim:TransformerWinding', NULL, 'transformer_power', 6, 'http://iec.ch/TC57/2005/CIM-schema-cim10#WindingType.primary');
+INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:Conductor.length', NULL, NULL, 'length', 1, NULL);
+INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:ConductorType', 'cim:ConductorType', NULL, 'section', 7, NULL);
+INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:WireType.radius', 'cim:WireType', NULL, 'section', 4, NULL);
+INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:PositionPoint.yPosition', 'cim:PositionPoint', NULL, 'coordinates', 1, NULL);
+INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:PositionPoint.xPosition', 'cim:PositionPoint', NULL, 'coordinates', 1, NULL);
+INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:Naming.name', NULL, NULL, 'name', 1, NULL);
+INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:Naming.description', NULL, NULL, 'electrical_reliability', 1, NULL);
+INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:WireArrangement.WireType', 'cim:WireArrangement', 'cim:WireType', 'section', 0, NULL);
+INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:WireArrangement.ConductorType', 'cim:WireArrangement', 'cim:ConductorType', 'section', 0, NULL);
+INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:TransformerWinding.MemberOf_PowerTransformer', 'cim:TransformerWinding', 'cim:PowerTransformer', 'transformer_power', 0, NULL);
+INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:Location', 'cim:PositionPoint', 'cim:Location', 'coordinates', 0, NULL);
+INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:Conductor.ConductorType', NULL, 'cim:ConductorType', 'section', 0, NULL);
+INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:LoadArea.EnergyConsumer', 'cim:LoadArea', 'cim:EnergyConsumer', 'total_power_of_consumers', 0, NULL);
+INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:ConductigEquipment.Terminals', NULL, 'cim:Terminal', 'transmitted_power', 0, NULL);
+INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:MeasurementValue.value', 'cim:MeasurementValue', NULL, 'transmitted_power', 4, NULL);
+INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:Measurment.Contain_MeasurementValues', 'cim:Measurment', 'cim:MeasurementValue', 'transmitted_power', 8, NULL);
+INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:Terminal.Measurments', 'cim:Terminal', 'cim:Measurment', 'transmitted_power', 8, NULL);
+INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:TransformerWinding.ratedKV', 'cim:TransformerWinding', NULL, 'transformer_power', 2, '10');
+INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:TransformerWinding.ratedMVA', 'cim:TransformerWinding', NULL, 'transformer_power', 1, NULL);
+INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:Terminal.ConductingEquipment', 'cim:Terminal', NULL, 'output', 3, NULL);
+INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:Terminal.ConnectivityNode', 'cim:Terminal', 'cim:ConnectivityNode', 'output', 0, NULL);
+INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:ConnectivityNode.MemberOf_EquipmentContainer', 'cim:ConnectivityNode', NULL, 'output', 9, NULL);
+INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:Naming.description', 'cim:ConnectivityNode', NULL, 'output', 2, 'output');
+INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:Naming.description', 'cim:ConnectivityNode', NULL, 'input', 2, 'input');
+INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:Terminal.ConductingEquipment', 'cim:Terminal', NULL, 'input', 3, NULL);
+INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:Terminal.ConnectivityNode', 'cim:Terminal', 'cim:ConnectivityNode', 'input', 0, NULL);
+INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:ConnectivityNode.MemberOf_EquipmentContainer', 'cim:ConnectivityNode', NULL, 'input', 9, NULL);
 
 
 --
@@ -263,15 +271,6 @@ ALTER TABLE ONLY power_grid."ACLineSegment"
 
 
 --
--- TOC entry 2891 (class 2606 OID 32951)
--- Name: Cim_model_nodes Cim_model_nodes_pkey1; Type: CONSTRAINT; Schema: power_grid; Owner: postgres
---
-
-ALTER TABLE ONLY power_grid."Cim_model_nodes"
-    ADD CONSTRAINT "Cim_model_nodes_pkey1" PRIMARY KEY (attributes);
-
-
---
 -- TOC entry 2889 (class 2606 OID 32943)
 -- Name: D_substation D_substation_pkey1; Type: CONSTRAINT; Schema: power_grid; Owner: postgres
 --
@@ -317,6 +316,15 @@ ALTER TABLE ONLY power_grid."Сonformity_table"
 
 
 --
+-- TOC entry 2891 (class 2606 OID 33080)
+-- Name: Cim_model_nodes primary_key_attributes_and_name_column; Type: CONSTRAINT; Schema: power_grid; Owner: postgres
+--
+
+ALTER TABLE ONLY power_grid."Cim_model_nodes"
+    ADD CONSTRAINT primary_key_attributes_and_name_column PRIMARY KEY (attributes, name_column);
+
+
+--
 -- TOC entry 2892 (class 1259 OID 32963)
 -- Name: ACLineSegment_output_input_key; Type: INDEX; Schema: power_grid; Owner: postgres
 --
@@ -333,7 +341,7 @@ ALTER TABLE ONLY power_grid."Diesel_generator"
     ADD CONSTRAINT "FK_Diesel_generator_Platform_DGU" FOREIGN KEY (uuid_platform) REFERENCES power_grid."Platform_DGU"(uuid_platform) ON DELETE CASCADE;
 
 
--- Completed on 2021-06-06 14:27:37
+-- Completed on 2021-06-06 18:21:57
 
 --
 -- PostgreSQL database dump complete
