@@ -227,26 +227,25 @@ void create_xmldoc(PGresult *res, xmlNodePtr root_node, char *name_table, PGconn
 						}
 						if (*tmp->resource == '0' || *tmp->resource == '8')
 							tmp->resource_class = PQgetvalue(cim_model_nodes, m, 3);
+						if (*tmp->resource == '9')
+							tmp->resource_class = PQgetvalue(res, i, j);
 						nodes = tmp;
 						m++;
 					}
 					tmp = nodes;
 					while (nodes != NULL)
 					{
-						if (*nodes->resource == '4' || *nodes->resource == '7' || *nodes->resource == '5' || *nodes->resource == '8')
+						tmp2 = nodes;
+						tmp_class = nodes->class;
+						save_uuid = nodes->uuid;
+						nodes = tmp;
+						while (nodes != NULL && save_uuid != NULL)
 						{
-							tmp2 = nodes;
-							tmp_class = nodes->class;
-							save_uuid = nodes->uuid;
-							nodes = tmp;
-							while (nodes != NULL)
-							{
-								if (nodes->resource_class != NULL && strcmp(tmp_class, nodes->resource_class) == 0)
-									nodes->resource_class = save_uuid;
-								nodes = nodes->next;
-							}
-							nodes = tmp2;
+							if (nodes->resource_class != NULL && strcmp(tmp_class, nodes->resource_class) == 0)
+								nodes->resource_class = save_uuid;
+							nodes = nodes->next;
 						}
+						nodes = tmp2;
 						if (*nodes->resource == '3' || *nodes->resource == '5')
 							nodes->resource_class = root_uuid;
 						nodes = nodes->next;
@@ -257,7 +256,8 @@ void create_xmldoc(PGresult *res, xmlNodePtr root_node, char *name_table, PGconn
 					{
 						if (*nodes->resource != '7')
 							node = xmlNewChild(nodes->node_class, NULL, BAD_CAST nodes->attributes,  nodes->value);
-						if (*nodes->resource == '0' || *nodes->resource == '3' || *nodes->resource == '6' || *nodes->resource == '5' || *nodes->resource == '8')
+						if (*nodes->resource == '0' || *nodes->resource == '3' || *nodes->resource == '6'
+							|| *nodes->resource == '5' || *nodes->resource == '8' || *nodes->resource == '9')
 							xmlNewProp(node, BAD_CAST "rdf:resource",
 								BAD_CAST nodes->resource_class);
 						nodes = nodes->next;
