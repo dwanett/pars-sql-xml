@@ -15,25 +15,31 @@
       <cim:Naming.name>ТП15357</cim:Naming.name>
       <cim:Naming.description>3</cim:Naming.description>  <!--минимальная категория потребителей-->
     </cim:Substation>
+
     <cim:EnergyConsumer rdf:about="034498cf-618d-4e5f-b569-7c3f0937b2c7">
       <cim:EnergyConsumer.pnom>1</cim:EnergyConsumer.pnom> <!--суммарная мощность потребителей-->
     </cim:EnergyConsumer>
+
     <cim:LoadArea rdf:about="163c13a5-b82e-430c-895e-153e8a6ecfad">
       <cim:LoadArea.EnergyConsumer rdf:resource="034498cf-618d-4e5f-b569-7c3f0937b2c7"/>
       <cim:LoadArea.Substation rdf:resource="5ccc0d7c-89ac-456e-9abc-a192053d03ca"/>
     </cim:LoadArea>
+
     <cim:PowerTransformer rdf:about="00add9c5-90dd-4b5f-8303-0045e6fd8911">
       <cim:PowerTransformer.MemberOf_Substation rdf:resource="5ccc0d7c-89ac-456e-9abc-a192053d03ca"/>
     </cim:PowerTransformer>
+
     <cim:TransformerWinding rdf:about="54c062b8-0c92-4d68-8172-d2140f427805">
       <cim:TransformerWinding.ratedMVA>2</cim:TransformerWinding.ratedMVA>
       <cim:TransformerWinding.ratedKV>10</cim:TransformerWinding.ratedKV> <!--номинал установленного трансформатра-->
       <cim:TransformerWinding.MemberOf_PowerTransformer rdf:resource="00add9c5-90dd-4b5f-8303-0045e6fd8911"/>
       <cim:TransformerWinding.windingType rdf:resource="http://iec.ch/TC57/2005/CIM-schema-cim10#WindingType.primary"/>
     </cim:TransformerWinding>
+
     <cim:Location rdf:about="1ce469c9-a4cb-4e4e-b711-a0e5a2292903">
       <cim:Location.PowerSystemResource rdf:resource="5ccc0d7c-89ac-456e-9abc-a192053d03ca"/>
     </cim:Location>
+
     <cim:PositionPoint rdf:about="ba33c6ec-16e9-4b52-abe1-bede9f8f531d">
       <cim:Location rdf:resource="1ce469c9-a4cb-4e4e-b711-a0e5a2292903"/>
       <cim:PositionPoint.xPosition>455</cim:PositionPoint.xPosition> <!--координаты ТП-->
@@ -45,9 +51,11 @@
     <cim:Substation rdf:about="37d26e86-d644-4545-a3dd-5388c21b899a"> <!--РП-->
       <cim:Naming.name>РП11111</cim:Naming.name>
     </cim:Substation>
+
     <cim:Location rdf:about="9e34fabd-f8e7-452c-915d-26f6060a18a6">
       <cim:Location.PowerSystemResource rdf:resource="37d26e86-d644-4545-a3dd-5388c21b899a"/>
     </cim:Location>
+
     <cim:PositionPoint rdf:about="735e6702-bdf5-4674-8784-92da392e346e">
       <cim:Location rdf:resource="9e34fabd-f8e7-452c-915d-26f6060a18a6"/> <!--координаты РП-->
       <cim:PositionPoint.xPosition>200</cim:PositionPoint.xPosition>
@@ -62,35 +70,44 @@
       <cim:Conductor.ConductorType rdf:resource="9439aefa-3609-45e7-bee7-3d839b722b5f"/>
       <cim:ConductigEquipment.Terminals rdf:resource="f782b154-ff6e-4c0f-87eb-9ebddee6d2af"/>
     </cim:ACLineSegment>
+
     <cim:ConductorType rdf:about="9439aefa-3609-45e7-bee7-3d839b722b5f"/>
     <cim:WireArrangement rdf:about="7be13497-492b-44fc-a3c9-ad3ca460b21c">
       <cim:WireArrangement.ConductorType rdf:resource="9439aefa-3609-45e7-bee7-3d839b722b5f"/>
       <cim:WireArrangement.WireType rdf:resource="2679e90c-f099-4f8d-8f3b-cb6a22b54530"/>
     </cim:WireArrangement>
+
     <cim:WireType rdf:about="2679e90c-f099-4f8d-8f3b-cb6a22b54530">
       <cim:WireType.radius>10</cim:WireType.radius> <!--Сечение-->
     </cim:WireType>
+
     <cim:MeasurementValue rdf:about="fa21f594-f2c5-4545-9b9a-136f3f2d1067">
       <cim:MeasurementValue.value>5</cim:MeasurementValue.value> <!--Передаваемая мощность-->
     </cim:MeasurementValue>
+
     <cim:Measurment rdf:about="52581bb6-354a-4ee6-8146-fcd22655a628">
       <cim:Measurment.Contain_MeasurementValues rdf:resource="fa21f594-f2c5-4545-9b9a-136f3f2d1067"/>
     </cim:Measurment>
+
     <cim:Terminal rdf:about="f782b154-ff6e-4c0f-87eb-9ebddee6d2af">
       <cim:Terminal.Measurments rdf:resource="52581bb6-354a-4ee6-8146-fcd22655a628"/>
     </cim:Terminal>
+
     <cim:ConnectivityNode rdf:about="1c54bf10-fc8e-4751-af74-611f2c173dd9">
       <cim:Naming.description>output</cim:Naming.description> <!--Источник-->
       <cim:ConnectivityNode.MemberOf_EquipmentContainer rdf:resource="37d26e86-d644-4545-a3dd-5388c21b899a"/> <!--РП-->
     </cim:ConnectivityNode>
+
     <cim:Terminal rdf:about="ed8e85e3-447a-4bb3-9470-cf252a187b70">
       <cim:Terminal.ConnectivityNode rdf:resource="1c54bf10-fc8e-4751-af74-611f2c173dd9"/>
       <cim:Terminal.ConductingEquipment rdf:resource="0eb69e49-a7c4-4cc7-846d-3c7e804c04fe"/> <!--Кабельная линия-->
     </cim:Terminal>
+
     <cim:ConnectivityNode rdf:about="5493c40f-faa7-4224-afb3-115430b863e2">
       <cim:ConnectivityNode.MemberOf_EquipmentContainer rdf:resource="5ccc0d7c-89ac-456e-9abc-a192053d03ca"/> <!--ТП-->
       <cim:Naming.description>input</cim:Naming.description> <!--Потребитель-->
     </cim:ConnectivityNode>
+
     <cim:Terminal rdf:about="209ca93f-d0ce-4cdf-903b-0f12d7f7f03e">
       <cim:Terminal.ConnectivityNode rdf:resource="5493c40f-faa7-4224-afb3-115430b863e2"/>
       <cim:Terminal.ConductingEquipment rdf:resource="0eb69e49-a7c4-4cc7-846d-3c7e804c04fe"/> <!--Кабельная линия-->
