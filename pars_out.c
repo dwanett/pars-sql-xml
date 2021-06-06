@@ -137,7 +137,6 @@ void create_xmldoc(PGresult *res, xmlNodePtr root_node, char *name_table, PGconn
 {
 	xmlNodePtr	node;
 	xmlNodePtr	node_table;
-	xmlNodePtr	node1;
 	PGresult 	*cim_model_table;
 	PGresult 	*cim_model_nodes;
 	char *name_table_in_cim;
@@ -145,10 +144,7 @@ void create_xmldoc(PGresult *res, xmlNodePtr root_node, char *name_table, PGconn
 	t_cim_model *nodes;
 	t_cim_model *tmp;
 	t_cim_model *tmp2;
-	t_cim_model *save;
 	char *tmp_class;
-	char *resurce_or_value;
-	const char* paramValues[2];
 	int size_stolb;
 	int size_str;
 	int i;
@@ -165,9 +161,8 @@ void create_xmldoc(PGresult *res, xmlNodePtr root_node, char *name_table, PGconn
 	save_uuid = NULL;
 	size_stolb = PQnfields(res);
 	size_str = PQntuples(res);
-	paramValues[0] = name_table;
 	cim_model_table = PQexecParams(conn, "SELECT path_to_object_in_cim FROM \"power_grid\".\"Сonformity_table\" WHERE \"name_table_in_bd\" = $1",
-			1, 0, paramValues, 0, 0, 0);
+			1, 0, &name_table, 0, 0, 0);
 	check_error(cim_model_table, conn, PGRES_TUPLES_OK);
 	if (PQntuples(cim_model_table) != 0)
 	{
@@ -197,6 +192,7 @@ void create_xmldoc(PGresult *res, xmlNodePtr root_node, char *name_table, PGconn
 						tmp->resource = PQgetvalue(cim_model_nodes, m, 2);
 						tmp->next = nodes;
 						tmp->value = NULL;
+						tmp->resource_class = NULL;
 						tmp->Position = 0;
 						if (*tmp->resource == '4' || *tmp->resource == '1')
 							tmp->value = PQgetvalue(res, i, j);
@@ -229,7 +225,7 @@ void create_xmldoc(PGresult *res, xmlNodePtr root_node, char *name_table, PGconn
 							tmp->node_class = node;
 							tmp_class = tmp->class;
 						}
-						if (*tmp->resource == '0')
+						if (*tmp->resource == '0' || *tmp->resource == '8')
 							tmp->resource_class = PQgetvalue(cim_model_nodes, m, 3);
 						nodes = tmp;
 						m++;
@@ -237,7 +233,7 @@ void create_xmldoc(PGresult *res, xmlNodePtr root_node, char *name_table, PGconn
 					tmp = nodes;
 					while (nodes != NULL)
 					{
-						if (*nodes->resource == '4' || *nodes->resource == '7' || *nodes->resource == '5')
+						if (*nodes->resource == '4' || *nodes->resource == '7' || *nodes->resource == '5' || *nodes->resource == '8')
 						{
 							tmp2 = nodes;
 							tmp_class = nodes->class;
@@ -245,7 +241,7 @@ void create_xmldoc(PGresult *res, xmlNodePtr root_node, char *name_table, PGconn
 							nodes = tmp;
 							while (nodes != NULL)
 							{
-								if (*nodes->resource == '0' && strcmp(tmp_class, nodes->resource_class) == 0)
+								if (nodes->resource_class != NULL && strcmp(tmp_class, nodes->resource_class) == 0)
 									nodes->resource_class = save_uuid;
 								nodes = nodes->next;
 							}
@@ -261,7 +257,7 @@ void create_xmldoc(PGresult *res, xmlNodePtr root_node, char *name_table, PGconn
 					{
 						if (*nodes->resource != '7')
 							node = xmlNewChild(nodes->node_class, NULL, BAD_CAST nodes->attributes,  nodes->value);
-						if (*nodes->resource == '0' || *nodes->resource == '3' || *nodes->resource == '6' || *nodes->resource == '5')
+						if (*nodes->resource == '0' || *nodes->resource == '3' || *nodes->resource == '6' || *nodes->resource == '5' || *nodes->resource == '8')
 							xmlNewProp(node, BAD_CAST "rdf:resource",
 								BAD_CAST nodes->resource_class);
 						nodes = nodes->next;
