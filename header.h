@@ -21,6 +21,32 @@ typedef struct			s_list_ins
 	struct s_list_ins	*next;
 }						t_list_ins;
 
+typedef struct			s_coordinates
+{
+	char 				*x;
+	char 				*y;
+}						t_coordinates;
+
+typedef struct			s_value
+{
+	char				*name_value;
+	char				*name_value_in_bd;
+	char				*value;
+	t_coordinates		coord;
+	struct s_value		*next;
+}						t_value;
+
+typedef struct			s_info_table
+{
+	char				*class_name;
+	char				*table_name;
+	int					namevalue;
+	char				*uuid;
+	char				*name_uuid_in_bd;
+	t_value				*value;
+	struct s_info_table	*next;
+}						t_info_table;
+
 typedef struct			s_cim_model
 {
 	char				*class;
