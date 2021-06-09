@@ -5,7 +5,7 @@
 -- Dumped from database version 13.2
 -- Dumped by pg_dump version 13.2
 
--- Started on 2021-06-06 18:21:57
+-- Started on 2021-06-09 22:47:53
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -29,33 +29,35 @@ CREATE SCHEMA power_grid;
 ALTER SCHEMA power_grid OWNER TO postgres;
 
 --
--- TOC entry 218 (class 1255 OID 32968)
+-- TOC entry 218 (class 1255 OID 33199)
 -- Name: insert_into_aclinesegment(uuid, character varying, integer, integer, integer, uuid, uuid); Type: PROCEDURE; Schema: power_grid; Owner: postgres
 --
 
-CREATE PROCEDURE power_grid.insert_into_aclinesegment(id uuid, nm character varying, leng integer, secti integer, transmi_pow integer, outp uuid, inp uuid)
+CREATE PROCEDURE power_grid.insert_into_aclinesegment(uuid_cable uuid, name character varying, length integer, section integer, transmitted_power integer, output uuid, input uuid)
     LANGUAGE plpgsql
     AS $$
 BEGIN
-	IF ((SELECT "uuid_TP" FROM power_grid."T_substation" WHERE "uuid_TP" = outp) IS NULL AND (SELECT "uuid_RP" FROM power_grid."D_substation" WHERE "uuid_RP" = outp) IS NULL) THEN
+	IF ((SELECT "uuid_TP" FROM power_grid."T_substation" WHERE "uuid_TP" = output) IS NULL AND (SELECT "uuid_RP" FROM power_grid."D_substation" WHERE "uuid_RP" = output) IS NULL) THEN
 		RAISE EXCEPTION 'Нет такого источника';
-	ELSEIF ((SELECT "uuid_TP" FROM power_grid."T_substation" WHERE "uuid_TP" = inp) IS NULL AND (SELECT "uuid_RP" FROM power_grid."D_substation" WHERE "uuid_RP" = inp) IS NULL) THEN
-		RAISE EXCEPTION 'Нет такого потреюителя';
-	ELSEIF ((SELECT "uuid_TP" FROM power_grid."T_substation" WHERE "uuid_TP" = outp) IS NOT NULL AND (SELECT "uuid_RP" FROM power_grid."D_substation" WHERE "uuid_RP" = inp) IS NOT NULL) THEN
+	ELSEIF ((SELECT "uuid_TP" FROM power_grid."T_substation" WHERE "uuid_TP" = input) IS NULL AND (SELECT "uuid_RP" FROM power_grid."D_substation" WHERE "uuid_RP" = input) IS NULL) THEN
+		RAISE EXCEPTION 'Нет такого потребителя';
+	ELSEIF ((SELECT "uuid_TP" FROM power_grid."T_substation" WHERE "uuid_TP" = output) IS NOT NULL AND (SELECT "uuid_RP" FROM power_grid."D_substation" WHERE "uuid_RP" = input) IS NOT NULL) THEN
 		RAISE EXCEPTION 'ТП не может быть источником для РП';
-	ELSEIF (outp = inp) THEN 
+	ELSEIF (output = input) THEN 
 		RAISE EXCEPTION 'Кабель не может приходить в тот-же объект';
 	ELSE 
-		UPDATE "ACLineSegment" SET ("name", "length", section, transmitted_power, output, input) = ("nm", leng, secti, transmi_pow, outp, inp) WHERE "uuid_cable" = id;
+		UPDATE power_grid."ACLineSegment" SET ("name", "length", "section", "transmitted_power", "output", "input") = 
+		("insert_into_aclinesegment"."name", "insert_into_aclinesegment"."length", "insert_into_aclinesegment"."section", "insert_into_aclinesegment"."transmitted_power", "insert_into_aclinesegment"."output", "insert_into_aclinesegment"."input") 
+		WHERE "ACLineSegment"."uuid_cable" = "insert_into_aclinesegment"."uuid_cable";
 		IF NOT FOUND THEN 
-			INSERT INTO "ACLineSegment" VALUES (id, "nm", leng, secti, transmi_pow, outp, inp);
+			INSERT INTO power_grid."ACLineSegment" VALUES ("uuid_cable", "name", "length", "section", "transmitted_power", "output", "input");
 		END IF;
 	END IF;
 END;
 $$;
 
 
-ALTER PROCEDURE power_grid.insert_into_aclinesegment(id uuid, nm character varying, leng integer, secti integer, transmi_pow integer, outp uuid, inp uuid) OWNER TO postgres;
+ALTER PROCEDURE power_grid.insert_into_aclinesegment(uuid_cable uuid, name character varying, length integer, section integer, transmitted_power integer, output uuid, input uuid) OWNER TO postgres;
 
 SET default_tablespace = '';
 
@@ -162,7 +164,8 @@ ALTER TABLE power_grid."T_substation" OWNER TO postgres;
 
 CREATE TABLE power_grid."Сonformity_table" (
     name_table_in_bd character varying(254) NOT NULL,
-    path_to_object_in_cim character varying(254)
+    path_to_object_in_cim character varying(254),
+    type_name_in_cim character varying(254)
 );
 
 
@@ -209,11 +212,11 @@ INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_c
 INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:Terminal.ConductingEquipment', 'cim:Terminal', NULL, 'output', 3, NULL);
 INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:Terminal.ConnectivityNode', 'cim:Terminal', 'cim:ConnectivityNode', 'output', 0, NULL);
 INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:ConnectivityNode.MemberOf_EquipmentContainer', 'cim:ConnectivityNode', NULL, 'output', 9, NULL);
-INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:Naming.description', 'cim:ConnectivityNode', NULL, 'output', 2, 'output');
-INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:Naming.description', 'cim:ConnectivityNode', NULL, 'input', 2, 'input');
 INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:Terminal.ConductingEquipment', 'cim:Terminal', NULL, 'input', 3, NULL);
 INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:Terminal.ConnectivityNode', 'cim:Terminal', 'cim:ConnectivityNode', 'input', 0, NULL);
 INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:ConnectivityNode.MemberOf_EquipmentContainer', 'cim:ConnectivityNode', NULL, 'input', 9, NULL);
+INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:Naming.description', 'cim:Terminal', NULL, 'input', 2, 'input');
+INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_column, resurce_or_value, const_value) VALUES ('cim:Naming.description', 'cim:Terminal', NULL, 'output', 2, 'output');
 
 
 --
@@ -230,7 +233,6 @@ INSERT INTO power_grid."Cim_model_nodes" (attributes, class, link_source, name_c
 -- Data for Name: Diesel_generator; Type: TABLE DATA; Schema: power_grid; Owner: postgres
 --
 
-INSERT INTO power_grid."Diesel_generator" ("uuid_DGU", power, coordinates, uuid_platform) VALUES ('b61278c6-2b1e-463c-a938-6e8cb695aaab', 1, '(1,1)', '448c5dd6-52cc-4cd0-9442-e67669992779');
 
 
 --
@@ -239,7 +241,6 @@ INSERT INTO power_grid."Diesel_generator" ("uuid_DGU", power, coordinates, uuid_
 -- Data for Name: Platform_DGU; Type: TABLE DATA; Schema: power_grid; Owner: postgres
 --
 
-INSERT INTO power_grid."Platform_DGU" (uuid_platform, coordinates) VALUES ('448c5dd6-52cc-4cd0-9442-e67669992779', '(1,1)');
 
 
 --
@@ -256,9 +257,9 @@ INSERT INTO power_grid."Platform_DGU" (uuid_platform, coordinates) VALUES ('448c
 -- Data for Name: Сonformity_table; Type: TABLE DATA; Schema: power_grid; Owner: postgres
 --
 
-INSERT INTO power_grid."Сonformity_table" (name_table_in_bd, path_to_object_in_cim) VALUES ('T_substation', 'cim:Substation');
-INSERT INTO power_grid."Сonformity_table" (name_table_in_bd, path_to_object_in_cim) VALUES ('D_substation', 'cim:Substation');
-INSERT INTO power_grid."Сonformity_table" (name_table_in_bd, path_to_object_in_cim) VALUES ('ACLineSegment', 'cim:ACLineSegment');
+INSERT INTO power_grid."Сonformity_table" (name_table_in_bd, path_to_object_in_cim, type_name_in_cim) VALUES ('ACLineSegment', 'cim:ACLineSegment', NULL);
+INSERT INTO power_grid."Сonformity_table" (name_table_in_bd, path_to_object_in_cim, type_name_in_cim) VALUES ('T_substation', 'cim:Substation', 'ТП');
+INSERT INTO power_grid."Сonformity_table" (name_table_in_bd, path_to_object_in_cim, type_name_in_cim) VALUES ('D_substation', 'cim:Substation', 'РП');
 
 
 --
@@ -341,7 +342,7 @@ ALTER TABLE ONLY power_grid."Diesel_generator"
     ADD CONSTRAINT "FK_Diesel_generator_Platform_DGU" FOREIGN KEY (uuid_platform) REFERENCES power_grid."Platform_DGU"(uuid_platform) ON DELETE CASCADE;
 
 
--- Completed on 2021-06-06 18:21:57
+-- Completed on 2021-06-09 22:47:53
 
 --
 -- PostgreSQL database dump complete
