@@ -1,117 +1,493 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?iec61970-552 version="2.0"?>
-<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:cim="http://www.iec.ch/TC57/2004/CIM-schema-cim10#" xmlns:md="http://www.iec.ch/TC57/61970-552/ModelDescription/1#" xml:base="urn:uuid:">
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:cim="http://www.iec.ch/TC57/2004/CIM-schema-cim10#"
+         xmlns:md="http://www.iec.ch/TC57/61970-552/ModelDescription/1#"
+         xml:base="urn:uuid:">
   <md:FullModel rdf:about="model-uri">
     <md:Model.created>2008-12-24</md:Model.created>
-    <md:Model.scenarioTime>2021-06-06</md:Model.scenarioTime>
+    <md:Model.scenarioTime>2021-06-09</md:Model.scenarioTime>
     <md:Model.Supersedes rdf:resource="urn:uuid:*-*-*-*-*"/>
     <md:Model.DependentOn rdf:resource="urn:uuid:*-*-*-*-*"/>
     <md:Model.version>32</md:Model.version>
     <md:Model.modelingAuthoritySet>http://</md:Model.modelingAuthoritySet>
     <md:Model.description>description</md:Model.description>
     <md:Model.profile>http://</md:Model.profile>
-    <!--...............................трансформаторная подстанция.....................начало..........-->
-    <cim:Substation rdf:about="5ccc0d7c-89ac-456e-9abc-a192053d03ca"> <!--ТП-->
+    <cim:Substation rdf:about="cf89ab99-28e6-4e0f-8837-8610d8a568ba">
       <cim:Naming.name>ТП15357</cim:Naming.name>
-      <cim:Naming.description>3</cim:Naming.description>  <!--минимальная категория потребителей-->
+      <cim:Naming.description>3</cim:Naming.description>
     </cim:Substation>
-
-    <cim:EnergyConsumer rdf:about="034498cf-618d-4e5f-b569-7c3f0937b2c7">
-      <cim:EnergyConsumer.pnom>1</cim:EnergyConsumer.pnom> <!--суммарная мощность потребителей-->
+    <cim:EnergyConsumer rdf:about="af4fdbfd-c5d0-4a8b-bdc3-bd951c2d52d2">
+      <cim:EnergyConsumer.pnom>1</cim:EnergyConsumer.pnom>
     </cim:EnergyConsumer>
-
-    <cim:LoadArea rdf:about="163c13a5-b82e-430c-895e-153e8a6ecfad">
-      <cim:LoadArea.EnergyConsumer rdf:resource="034498cf-618d-4e5f-b569-7c3f0937b2c7"/>
-      <cim:LoadArea.Substation rdf:resource="5ccc0d7c-89ac-456e-9abc-a192053d03ca"/>
+    <cim:LoadArea rdf:about="64a6e6c5-2ac7-4497-80e5-72451c60be98">
+      <cim:LoadArea.EnergyConsumer rdf:resource="af4fdbfd-c5d0-4a8b-bdc3-bd951c2d52d2"/>
+      <cim:LoadArea.Substation rdf:resource="cf89ab99-28e6-4e0f-8837-8610d8a568ba"/>
     </cim:LoadArea>
-
-    <cim:PowerTransformer rdf:about="00add9c5-90dd-4b5f-8303-0045e6fd8911">
-      <cim:PowerTransformer.MemberOf_Substation rdf:resource="5ccc0d7c-89ac-456e-9abc-a192053d03ca"/>
+    <cim:PowerTransformer rdf:about="8c9e160c-d5d4-4dac-a497-a590e3a18547">
+      <cim:PowerTransformer.MemberOf_Substation rdf:resource="cf89ab99-28e6-4e0f-8837-8610d8a568ba"/>
     </cim:PowerTransformer>
-
-    <cim:TransformerWinding rdf:about="54c062b8-0c92-4d68-8172-d2140f427805">
+    <cim:TransformerWinding rdf:about="282a403a-dd0e-4410-a661-4e2eb04d9844">
       <cim:TransformerWinding.ratedMVA>2</cim:TransformerWinding.ratedMVA>
-      <cim:TransformerWinding.ratedKV>10</cim:TransformerWinding.ratedKV> <!--номинал установленного трансформатра-->
-      <cim:TransformerWinding.MemberOf_PowerTransformer rdf:resource="00add9c5-90dd-4b5f-8303-0045e6fd8911"/>
+      <cim:TransformerWinding.ratedKV>10</cim:TransformerWinding.ratedKV>
+      <cim:TransformerWinding.MemberOf_PowerTransformer rdf:resource="8c9e160c-d5d4-4dac-a497-a590e3a18547"/>
       <cim:TransformerWinding.windingType rdf:resource="http://iec.ch/TC57/2005/CIM-schema-cim10#WindingType.primary"/>
     </cim:TransformerWinding>
-
-    <cim:Location rdf:about="1ce469c9-a4cb-4e4e-b711-a0e5a2292903">
-      <cim:Location.PowerSystemResource rdf:resource="5ccc0d7c-89ac-456e-9abc-a192053d03ca"/>
+    <cim:Location rdf:about="71ed6b65-bced-4839-a0ee-8ff9818ec1d3">
+      <cim:Location.PowerSystemResource rdf:resource="cf89ab99-28e6-4e0f-8837-8610d8a568ba"/>
     </cim:Location>
-
-    <cim:PositionPoint rdf:about="ba33c6ec-16e9-4b52-abe1-bede9f8f531d">
-      <cim:Location rdf:resource="1ce469c9-a4cb-4e4e-b711-a0e5a2292903"/>
-      <cim:PositionPoint.xPosition>455</cim:PositionPoint.xPosition> <!--координаты ТП-->
+    <cim:PositionPoint rdf:about="41496683-af68-4e04-83d3-9695a5d93e67">
+      <cim:Location rdf:resource="71ed6b65-bced-4839-a0ee-8ff9818ec1d3"/>
+      <cim:PositionPoint.xPosition>455</cim:PositionPoint.xPosition>
       <cim:PositionPoint.yPosition>5214</cim:PositionPoint.yPosition>
     </cim:PositionPoint>
-    <!--................................трансформаторная подстанция....................коенц...........-->
-
-    <!--...............................распределительная подстанция....................начало..........-->
-    <cim:Substation rdf:about="37d26e86-d644-4545-a3dd-5388c21b899a"> <!--РП-->
-      <cim:Naming.name>РП11111</cim:Naming.name>
+    <cim:Substation rdf:about="106972c4-b909-49fe-b1c2-bcdcf6e0a911">
+      <cim:Naming.name>ТП15357</cim:Naming.name>
+      <cim:Naming.description>3</cim:Naming.description>
     </cim:Substation>
-
-    <cim:Location rdf:about="9e34fabd-f8e7-452c-915d-26f6060a18a6">
-      <cim:Location.PowerSystemResource rdf:resource="37d26e86-d644-4545-a3dd-5388c21b899a"/>
+    <cim:EnergyConsumer rdf:about="551142c8-f3f1-4f68-ac91-87fb92aa3646">
+      <cim:EnergyConsumer.pnom>1</cim:EnergyConsumer.pnom>
+    </cim:EnergyConsumer>
+    <cim:LoadArea rdf:about="c0735748-2c00-4f13-8147-87d80b3e1f58">
+      <cim:LoadArea.EnergyConsumer rdf:resource="551142c8-f3f1-4f68-ac91-87fb92aa3646"/>
+      <cim:LoadArea.Substation rdf:resource="106972c4-b909-49fe-b1c2-bcdcf6e0a911"/>
+    </cim:LoadArea>
+    <cim:PowerTransformer rdf:about="8c2ee8b6-d7f1-4856-ad36-2746e54ed87d">
+      <cim:PowerTransformer.MemberOf_Substation rdf:resource="106972c4-b909-49fe-b1c2-bcdcf6e0a911"/>
+    </cim:PowerTransformer>
+    <cim:TransformerWinding rdf:about="7bb07234-e1ce-46c7-bf97-4ef3bb4d8cce">
+      <cim:TransformerWinding.ratedMVA>2</cim:TransformerWinding.ratedMVA>
+      <cim:TransformerWinding.ratedKV>10</cim:TransformerWinding.ratedKV>
+      <cim:TransformerWinding.MemberOf_PowerTransformer rdf:resource="8c2ee8b6-d7f1-4856-ad36-2746e54ed87d"/>
+      <cim:TransformerWinding.windingType rdf:resource="http://iec.ch/TC57/2005/CIM-schema-cim10#WindingType.primary"/>
+    </cim:TransformerWinding>
+    <cim:Location rdf:about="02343c45-d2dc-4ca3-94d6-1ec53f8562c5">
+      <cim:Location.PowerSystemResource rdf:resource="106972c4-b909-49fe-b1c2-bcdcf6e0a911"/>
     </cim:Location>
-
-    <cim:PositionPoint rdf:about="735e6702-bdf5-4674-8784-92da392e346e">
-      <cim:Location rdf:resource="9e34fabd-f8e7-452c-915d-26f6060a18a6"/> <!--координаты РП-->
-      <cim:PositionPoint.xPosition>200</cim:PositionPoint.xPosition>
-      <cim:PositionPoint.yPosition>300</cim:PositionPoint.yPosition>
+    <cim:PositionPoint rdf:about="9d48a1bb-1107-444e-9253-42b9e93018e9">
+      <cim:Location rdf:resource="02343c45-d2dc-4ca3-94d6-1ec53f8562c5"/>
+      <cim:PositionPoint.xPosition>455</cim:PositionPoint.xPosition>
+      <cim:PositionPoint.yPosition>5214</cim:PositionPoint.yPosition>
     </cim:PositionPoint>
-    <!--...............................распределительная подстанция.....................коенц...........-->
-
-    <!--......................................кабельная линия...........................начало..........-->
-    <cim:ACLineSegment rdf:about="0eb69e49-a7c4-4cc7-846d-3c7e804c04fe"> <!--Кабельная линия-->
-      <cim:Naming.name>AIGUE0001</cim:Naming.name> <!--Маркировка кабельной линии--> <!--Возможно поменяю на cim:Naming.description-->
-      <cim:Conductor.length>50</cim:Conductor.length>
-      <cim:Conductor.ConductorType rdf:resource="9439aefa-3609-45e7-bee7-3d839b722b5f"/>
-      <cim:ConductigEquipment.Terminals rdf:resource="f782b154-ff6e-4c0f-87eb-9ebddee6d2af"/>
-    </cim:ACLineSegment>
-
-    <cim:ConductorType rdf:about="9439aefa-3609-45e7-bee7-3d839b722b5f"/>
-    <cim:WireArrangement rdf:about="7be13497-492b-44fc-a3c9-ad3ca460b21c">
-      <cim:WireArrangement.ConductorType rdf:resource="9439aefa-3609-45e7-bee7-3d839b722b5f"/>
-      <cim:WireArrangement.WireType rdf:resource="2679e90c-f099-4f8d-8f3b-cb6a22b54530"/>
-    </cim:WireArrangement>
-
-    <cim:WireType rdf:about="2679e90c-f099-4f8d-8f3b-cb6a22b54530">
-      <cim:WireType.radius>10</cim:WireType.radius> <!--Сечение-->
-    </cim:WireType>
-
-    <cim:MeasurementValue rdf:about="fa21f594-f2c5-4545-9b9a-136f3f2d1067">
-      <cim:MeasurementValue.value>5</cim:MeasurementValue.value> <!--Передаваемая мощность-->
-    </cim:MeasurementValue>
-
-    <cim:Measurment rdf:about="52581bb6-354a-4ee6-8146-fcd22655a628">
-      <cim:Measurment.Contain_MeasurementValues rdf:resource="fa21f594-f2c5-4545-9b9a-136f3f2d1067"/>
-    </cim:Measurment>
-
-    <cim:Terminal rdf:about="f782b154-ff6e-4c0f-87eb-9ebddee6d2af">
-      <cim:Terminal.Measurments rdf:resource="52581bb6-354a-4ee6-8146-fcd22655a628"/>
-    </cim:Terminal>
-
-    <cim:ConnectivityNode rdf:about="1c54bf10-fc8e-4751-af74-611f2c173dd9">
-      <cim:Naming.description>output</cim:Naming.description> <!--Источник-->
-      <cim:ConnectivityNode.MemberOf_EquipmentContainer rdf:resource="37d26e86-d644-4545-a3dd-5388c21b899a"/> <!--РП-->
-    </cim:ConnectivityNode>
-
-    <cim:Terminal rdf:about="ed8e85e3-447a-4bb3-9470-cf252a187b70">
-      <cim:Terminal.ConnectivityNode rdf:resource="1c54bf10-fc8e-4751-af74-611f2c173dd9"/>
-      <cim:Terminal.ConductingEquipment rdf:resource="0eb69e49-a7c4-4cc7-846d-3c7e804c04fe"/> <!--Кабельная линия-->
-    </cim:Terminal>
-
-    <cim:ConnectivityNode rdf:about="5493c40f-faa7-4224-afb3-115430b863e2">
-      <cim:ConnectivityNode.MemberOf_EquipmentContainer rdf:resource="5ccc0d7c-89ac-456e-9abc-a192053d03ca"/> <!--ТП-->
-      <cim:Naming.description>input</cim:Naming.description> <!--Потребитель-->
-    </cim:ConnectivityNode>
-
-    <cim:Terminal rdf:about="209ca93f-d0ce-4cdf-903b-0f12d7f7f03e">
-      <cim:Terminal.ConnectivityNode rdf:resource="5493c40f-faa7-4224-afb3-115430b863e2"/>
-      <cim:Terminal.ConductingEquipment rdf:resource="0eb69e49-a7c4-4cc7-846d-3c7e804c04fe"/> <!--Кабельная линия-->
-    </cim:Terminal>
-    <!--......................................кабельная линия...........................коенц...........-->
+    <cim:Substation rdf:about="0ced0858-8333-435e-a214-262cf0885495">
+      <cim:Naming.name>ТП15357</cim:Naming.name>
+      <cim:Naming.description>3</cim:Naming.description>
+    </cim:Substation>
+    <cim:EnergyConsumer rdf:about="c22f8ffa-8911-402a-b1d6-b9befbdd77be">
+      <cim:EnergyConsumer.pnom>1</cim:EnergyConsumer.pnom>
+    </cim:EnergyConsumer>
+    <cim:LoadArea rdf:about="3f94d545-ee28-4a8a-97c1-b0a67b4f3240">
+      <cim:LoadArea.EnergyConsumer rdf:resource="c22f8ffa-8911-402a-b1d6-b9befbdd77be"/>
+      <cim:LoadArea.Substation rdf:resource="0ced0858-8333-435e-a214-262cf0885495"/>
+    </cim:LoadArea>
+    <cim:PowerTransformer rdf:about="fc9a6cff-5e93-49c1-ac4d-5a290667074c">
+      <cim:PowerTransformer.MemberOf_Substation rdf:resource="0ced0858-8333-435e-a214-262cf0885495"/>
+    </cim:PowerTransformer>
+    <cim:TransformerWinding rdf:about="54320f7e-d666-47f7-afea-3edc9bc9785c">
+      <cim:TransformerWinding.ratedMVA>2</cim:TransformerWinding.ratedMVA>
+      <cim:TransformerWinding.ratedKV>10</cim:TransformerWinding.ratedKV>
+      <cim:TransformerWinding.MemberOf_PowerTransformer rdf:resource="fc9a6cff-5e93-49c1-ac4d-5a290667074c"/>
+      <cim:TransformerWinding.windingType rdf:resource="http://iec.ch/TC57/2005/CIM-schema-cim10#WindingType.primary"/>
+    </cim:TransformerWinding>
+    <cim:Location rdf:about="b7da243e-0bf4-49c2-a061-c7e0d6d48a7c">
+      <cim:Location.PowerSystemResource rdf:resource="0ced0858-8333-435e-a214-262cf0885495"/>
+    </cim:Location>
+    <cim:PositionPoint rdf:about="82c77bb4-057b-49e0-9839-49901bcdc041">
+      <cim:Location rdf:resource="b7da243e-0bf4-49c2-a061-c7e0d6d48a7c"/>
+      <cim:PositionPoint.xPosition>455</cim:PositionPoint.xPosition>
+      <cim:PositionPoint.yPosition>5214</cim:PositionPoint.yPosition>
+    </cim:PositionPoint>
+    <cim:Substation rdf:about="4612f7d7-64e1-4a84-9df4-f4d91c54e497">
+      <cim:Naming.name>ТП15357</cim:Naming.name>
+      <cim:Naming.description>3</cim:Naming.description>
+    </cim:Substation>
+    <cim:EnergyConsumer rdf:about="348c13d6-21bf-4b42-96ee-fb94792c8f02">
+      <cim:EnergyConsumer.pnom>1</cim:EnergyConsumer.pnom>
+    </cim:EnergyConsumer>
+    <cim:LoadArea rdf:about="a6d00853-2d12-42e0-80ef-dd4d00c4b840">
+      <cim:LoadArea.EnergyConsumer rdf:resource="348c13d6-21bf-4b42-96ee-fb94792c8f02"/>
+      <cim:LoadArea.Substation rdf:resource="4612f7d7-64e1-4a84-9df4-f4d91c54e497"/>
+    </cim:LoadArea>
+    <cim:PowerTransformer rdf:about="0a18ba56-5564-441e-b072-844910dfa979">
+      <cim:PowerTransformer.MemberOf_Substation rdf:resource="4612f7d7-64e1-4a84-9df4-f4d91c54e497"/>
+    </cim:PowerTransformer>
+    <cim:TransformerWinding rdf:about="8f097d60-252f-4325-8322-2bb362807c57">
+      <cim:TransformerWinding.ratedMVA>2</cim:TransformerWinding.ratedMVA>
+      <cim:TransformerWinding.ratedKV>10</cim:TransformerWinding.ratedKV>
+      <cim:TransformerWinding.MemberOf_PowerTransformer rdf:resource="0a18ba56-5564-441e-b072-844910dfa979"/>
+      <cim:TransformerWinding.windingType rdf:resource="http://iec.ch/TC57/2005/CIM-schema-cim10#WindingType.primary"/>
+    </cim:TransformerWinding>
+    <cim:Location rdf:about="36e15497-367c-426e-8ab7-6049d4a48a09">
+      <cim:Location.PowerSystemResource rdf:resource="4612f7d7-64e1-4a84-9df4-f4d91c54e497"/>
+    </cim:Location>
+    <cim:PositionPoint rdf:about="2145e091-6768-4161-890c-6ec6e7878f50">
+      <cim:Location rdf:resource="36e15497-367c-426e-8ab7-6049d4a48a09"/>
+      <cim:PositionPoint.xPosition>455</cim:PositionPoint.xPosition>
+      <cim:PositionPoint.yPosition>5214</cim:PositionPoint.yPosition>
+    </cim:PositionPoint>
+    <cim:Substation rdf:about="24b199c3-03cb-4ef7-9b7d-f37beb2276bd">
+      <cim:Naming.name>ТП15357</cim:Naming.name>
+      <cim:Naming.description>3</cim:Naming.description>
+    </cim:Substation>
+    <cim:EnergyConsumer rdf:about="f88322d5-26cd-44c4-b1ae-96cf77741a65">
+      <cim:EnergyConsumer.pnom>1</cim:EnergyConsumer.pnom>
+    </cim:EnergyConsumer>
+    <cim:LoadArea rdf:about="435ac0a0-de9f-4ad0-9fbc-596625457bb9">
+      <cim:LoadArea.EnergyConsumer rdf:resource="f88322d5-26cd-44c4-b1ae-96cf77741a65"/>
+      <cim:LoadArea.Substation rdf:resource="24b199c3-03cb-4ef7-9b7d-f37beb2276bd"/>
+    </cim:LoadArea>
+    <cim:PowerTransformer rdf:about="67006aa4-23c5-46cb-98df-52b37683a54e">
+      <cim:PowerTransformer.MemberOf_Substation rdf:resource="24b199c3-03cb-4ef7-9b7d-f37beb2276bd"/>
+    </cim:PowerTransformer>
+    <cim:TransformerWinding rdf:about="00f0d2a7-3732-43eb-addc-9a394db3a48f">
+      <cim:TransformerWinding.ratedMVA>2</cim:TransformerWinding.ratedMVA>
+      <cim:TransformerWinding.ratedKV>10</cim:TransformerWinding.ratedKV>
+      <cim:TransformerWinding.MemberOf_PowerTransformer rdf:resource="67006aa4-23c5-46cb-98df-52b37683a54e"/>
+      <cim:TransformerWinding.windingType rdf:resource="http://iec.ch/TC57/2005/CIM-schema-cim10#WindingType.primary"/>
+    </cim:TransformerWinding>
+    <cim:Location rdf:about="3b3286e4-874c-4a75-b3af-7417970a60f0">
+      <cim:Location.PowerSystemResource rdf:resource="24b199c3-03cb-4ef7-9b7d-f37beb2276bd"/>
+    </cim:Location>
+    <cim:PositionPoint rdf:about="259697cd-9366-4cb4-afca-07157161259b">
+      <cim:Location rdf:resource="3b3286e4-874c-4a75-b3af-7417970a60f0"/>
+      <cim:PositionPoint.xPosition>455</cim:PositionPoint.xPosition>
+      <cim:PositionPoint.yPosition>5214</cim:PositionPoint.yPosition>
+    </cim:PositionPoint>
+    <cim:Substation rdf:about="6382d9e8-42f4-4099-bbdd-6594b919205a">
+      <cim:Naming.name>ТП15357</cim:Naming.name>
+      <cim:Naming.description>3</cim:Naming.description>
+    </cim:Substation>
+    <cim:EnergyConsumer rdf:about="fb149e60-b33b-4493-a44d-d726542bd348">
+      <cim:EnergyConsumer.pnom>1</cim:EnergyConsumer.pnom>
+    </cim:EnergyConsumer>
+    <cim:LoadArea rdf:about="f4257006-0ca5-4bf3-97fa-2ad3681aaf1d">
+      <cim:LoadArea.EnergyConsumer rdf:resource="fb149e60-b33b-4493-a44d-d726542bd348"/>
+      <cim:LoadArea.Substation rdf:resource="6382d9e8-42f4-4099-bbdd-6594b919205a"/>
+    </cim:LoadArea>
+    <cim:PowerTransformer rdf:about="101551e2-ebb4-49d8-b328-8446f055ae32">
+      <cim:PowerTransformer.MemberOf_Substation rdf:resource="6382d9e8-42f4-4099-bbdd-6594b919205a"/>
+    </cim:PowerTransformer>
+    <cim:TransformerWinding rdf:about="fd7946b3-a6ff-4d72-b9bb-4eb6d1fe482e">
+      <cim:TransformerWinding.ratedMVA>2</cim:TransformerWinding.ratedMVA>
+      <cim:TransformerWinding.ratedKV>10</cim:TransformerWinding.ratedKV>
+      <cim:TransformerWinding.MemberOf_PowerTransformer rdf:resource="101551e2-ebb4-49d8-b328-8446f055ae32"/>
+      <cim:TransformerWinding.windingType rdf:resource="http://iec.ch/TC57/2005/CIM-schema-cim10#WindingType.primary"/>
+    </cim:TransformerWinding>
+    <cim:Location rdf:about="0650641e-e978-4b49-890c-4dcd9263de0f">
+      <cim:Location.PowerSystemResource rdf:resource="6382d9e8-42f4-4099-bbdd-6594b919205a"/>
+    </cim:Location>
+    <cim:PositionPoint rdf:about="37ffb08a-4340-416d-b7b5-4c65cab8ef46">
+      <cim:Location rdf:resource="0650641e-e978-4b49-890c-4dcd9263de0f"/>
+      <cim:PositionPoint.xPosition>455</cim:PositionPoint.xPosition>
+      <cim:PositionPoint.yPosition>5214</cim:PositionPoint.yPosition>
+    </cim:PositionPoint>
+    <cim:Substation rdf:about="e328eaa6-5760-4580-b4ba-76d697fc5a36">
+      <cim:Naming.name>ТП15357</cim:Naming.name>
+      <cim:Naming.description>3</cim:Naming.description>
+    </cim:Substation>
+    <cim:EnergyConsumer rdf:about="479eedec-8be8-48ee-bcc6-738b5cdaf10c">
+      <cim:EnergyConsumer.pnom>1</cim:EnergyConsumer.pnom>
+    </cim:EnergyConsumer>
+    <cim:LoadArea rdf:about="365d4bee-2e0b-4c05-a569-9e170db03c2f">
+      <cim:LoadArea.EnergyConsumer rdf:resource="479eedec-8be8-48ee-bcc6-738b5cdaf10c"/>
+      <cim:LoadArea.Substation rdf:resource="e328eaa6-5760-4580-b4ba-76d697fc5a36"/>
+    </cim:LoadArea>
+    <cim:PowerTransformer rdf:about="09e84ca8-6a33-43ea-9f04-18eb4ac4072e">
+      <cim:PowerTransformer.MemberOf_Substation rdf:resource="e328eaa6-5760-4580-b4ba-76d697fc5a36"/>
+    </cim:PowerTransformer>
+    <cim:TransformerWinding rdf:about="22fc75e4-5067-4fd4-b67e-d91a875a7387">
+      <cim:TransformerWinding.ratedMVA>2</cim:TransformerWinding.ratedMVA>
+      <cim:TransformerWinding.ratedKV>10</cim:TransformerWinding.ratedKV>
+      <cim:TransformerWinding.MemberOf_PowerTransformer rdf:resource="09e84ca8-6a33-43ea-9f04-18eb4ac4072e"/>
+      <cim:TransformerWinding.windingType rdf:resource="http://iec.ch/TC57/2005/CIM-schema-cim10#WindingType.primary"/>
+    </cim:TransformerWinding>
+    <cim:Location rdf:about="529ed895-3e36-4d06-ad6d-5eaf91ace07a">
+      <cim:Location.PowerSystemResource rdf:resource="e328eaa6-5760-4580-b4ba-76d697fc5a36"/>
+    </cim:Location>
+    <cim:PositionPoint rdf:about="c72277f3-c2ca-48a0-a8cd-41c50551812b">
+      <cim:Location rdf:resource="529ed895-3e36-4d06-ad6d-5eaf91ace07a"/>
+      <cim:PositionPoint.xPosition>455</cim:PositionPoint.xPosition>
+      <cim:PositionPoint.yPosition>5214</cim:PositionPoint.yPosition>
+    </cim:PositionPoint>
+    <cim:Substation rdf:about="70d548c6-bf23-4076-9d3c-384d56835aba">
+      <cim:Naming.name>ТП15357</cim:Naming.name>
+      <cim:Naming.description>3</cim:Naming.description>
+    </cim:Substation>
+    <cim:EnergyConsumer rdf:about="0b7e0aac-dc9e-471c-b79f-b3866ced14af">
+      <cim:EnergyConsumer.pnom>1</cim:EnergyConsumer.pnom>
+    </cim:EnergyConsumer>
+    <cim:LoadArea rdf:about="64744dd0-f745-4301-9d4c-3082c3dfdfd2">
+      <cim:LoadArea.EnergyConsumer rdf:resource="0b7e0aac-dc9e-471c-b79f-b3866ced14af"/>
+      <cim:LoadArea.Substation rdf:resource="70d548c6-bf23-4076-9d3c-384d56835aba"/>
+    </cim:LoadArea>
+    <cim:PowerTransformer rdf:about="c4bde1aa-854e-44f0-b617-6fe5205efb6e">
+      <cim:PowerTransformer.MemberOf_Substation rdf:resource="70d548c6-bf23-4076-9d3c-384d56835aba"/>
+    </cim:PowerTransformer>
+    <cim:TransformerWinding rdf:about="a78c057d-c2a1-4664-bc58-78350859bcf0">
+      <cim:TransformerWinding.ratedMVA>2</cim:TransformerWinding.ratedMVA>
+      <cim:TransformerWinding.ratedKV>10</cim:TransformerWinding.ratedKV>
+      <cim:TransformerWinding.MemberOf_PowerTransformer rdf:resource="c4bde1aa-854e-44f0-b617-6fe5205efb6e"/>
+      <cim:TransformerWinding.windingType rdf:resource="http://iec.ch/TC57/2005/CIM-schema-cim10#WindingType.primary"/>
+    </cim:TransformerWinding>
+    <cim:Location rdf:about="4e6607b2-381b-4252-9c42-5c26c5893f07">
+      <cim:Location.PowerSystemResource rdf:resource="70d548c6-bf23-4076-9d3c-384d56835aba"/>
+    </cim:Location>
+    <cim:PositionPoint rdf:about="f7bbc3ce-9bce-4463-85fd-0fdd23f2dd92">
+      <cim:Location rdf:resource="4e6607b2-381b-4252-9c42-5c26c5893f07"/>
+      <cim:PositionPoint.xPosition>455</cim:PositionPoint.xPosition>
+      <cim:PositionPoint.yPosition>5214</cim:PositionPoint.yPosition>
+    </cim:PositionPoint>
+    <cim:Substation rdf:about="00dda345-91f6-4f36-a316-42afa96940ef">
+      <cim:Naming.name>ТП15357</cim:Naming.name>
+      <cim:Naming.description>3</cim:Naming.description>
+    </cim:Substation>
+    <cim:EnergyConsumer rdf:about="0c80ed20-5123-4e5b-8889-2094fd5cc056">
+      <cim:EnergyConsumer.pnom>1</cim:EnergyConsumer.pnom>
+    </cim:EnergyConsumer>
+    <cim:LoadArea rdf:about="0976520f-2dee-4eab-8039-d3d6403e3dcd">
+      <cim:LoadArea.EnergyConsumer rdf:resource="0c80ed20-5123-4e5b-8889-2094fd5cc056"/>
+      <cim:LoadArea.Substation rdf:resource="00dda345-91f6-4f36-a316-42afa96940ef"/>
+    </cim:LoadArea>
+    <cim:PowerTransformer rdf:about="566d3207-c9ee-405d-8603-d02b41faf2cb">
+      <cim:PowerTransformer.MemberOf_Substation rdf:resource="00dda345-91f6-4f36-a316-42afa96940ef"/>
+    </cim:PowerTransformer>
+    <cim:TransformerWinding rdf:about="6ed7f58b-ac21-439f-ab13-4eb70171fb8b">
+      <cim:TransformerWinding.ratedMVA>2</cim:TransformerWinding.ratedMVA>
+      <cim:TransformerWinding.ratedKV>10</cim:TransformerWinding.ratedKV>
+      <cim:TransformerWinding.MemberOf_PowerTransformer rdf:resource="566d3207-c9ee-405d-8603-d02b41faf2cb"/>
+      <cim:TransformerWinding.windingType rdf:resource="http://iec.ch/TC57/2005/CIM-schema-cim10#WindingType.primary"/>
+    </cim:TransformerWinding>
+    <cim:Location rdf:about="5d601299-fb3a-4cc3-ae39-6c06e13cde08">
+      <cim:Location.PowerSystemResource rdf:resource="00dda345-91f6-4f36-a316-42afa96940ef"/>
+    </cim:Location>
+    <cim:PositionPoint rdf:about="f789fa0e-0368-48fb-891f-5cc86bd8c530">
+      <cim:Location rdf:resource="5d601299-fb3a-4cc3-ae39-6c06e13cde08"/>
+      <cim:PositionPoint.xPosition>455</cim:PositionPoint.xPosition>
+      <cim:PositionPoint.yPosition>5214</cim:PositionPoint.yPosition>
+    </cim:PositionPoint>
+    <cim:Substation rdf:about="4555a875-fe5b-4d36-9566-150a55805014">
+      <cim:Naming.name>ТП15357</cim:Naming.name>
+      <cim:Naming.description>3</cim:Naming.description>
+    </cim:Substation>
+    <cim:EnergyConsumer rdf:about="49e91d3b-24c6-4f0f-8e63-08fbd5bdb38f">
+      <cim:EnergyConsumer.pnom>1</cim:EnergyConsumer.pnom>
+    </cim:EnergyConsumer>
+    <cim:LoadArea rdf:about="1316b3fe-5f6c-4cde-bc0d-fd26063c0243">
+      <cim:LoadArea.EnergyConsumer rdf:resource="49e91d3b-24c6-4f0f-8e63-08fbd5bdb38f"/>
+      <cim:LoadArea.Substation rdf:resource="4555a875-fe5b-4d36-9566-150a55805014"/>
+    </cim:LoadArea>
+    <cim:PowerTransformer rdf:about="2847c20f-1050-43c2-a34d-6d8f4a292677">
+      <cim:PowerTransformer.MemberOf_Substation rdf:resource="4555a875-fe5b-4d36-9566-150a55805014"/>
+    </cim:PowerTransformer>
+    <cim:TransformerWinding rdf:about="d664878a-1920-4a09-859b-d22b8aee3432">
+      <cim:TransformerWinding.ratedMVA>2</cim:TransformerWinding.ratedMVA>
+      <cim:TransformerWinding.ratedKV>10</cim:TransformerWinding.ratedKV>
+      <cim:TransformerWinding.MemberOf_PowerTransformer rdf:resource="2847c20f-1050-43c2-a34d-6d8f4a292677"/>
+      <cim:TransformerWinding.windingType rdf:resource="http://iec.ch/TC57/2005/CIM-schema-cim10#WindingType.primary"/>
+    </cim:TransformerWinding>
+    <cim:Location rdf:about="b54e3a56-b67a-43af-a70a-29ded738e894">
+      <cim:Location.PowerSystemResource rdf:resource="4555a875-fe5b-4d36-9566-150a55805014"/>
+    </cim:Location>
+    <cim:PositionPoint rdf:about="157e205a-3359-4520-aa10-e5afb883184c">
+      <cim:Location rdf:resource="b54e3a56-b67a-43af-a70a-29ded738e894"/>
+      <cim:PositionPoint.xPosition>455</cim:PositionPoint.xPosition>
+      <cim:PositionPoint.yPosition>5214</cim:PositionPoint.yPosition>
+    </cim:PositionPoint>
+    <cim:Substation rdf:about="c60d37cd-bc2e-4d4d-8e0a-5e76d4df6d95">
+      <cim:Naming.name>ТП15357</cim:Naming.name>
+      <cim:Naming.description>3</cim:Naming.description>
+    </cim:Substation>
+    <cim:EnergyConsumer rdf:about="16b11fe1-b862-468d-b80b-92e946c60ad3">
+      <cim:EnergyConsumer.pnom>1</cim:EnergyConsumer.pnom>
+    </cim:EnergyConsumer>
+    <cim:LoadArea rdf:about="19fad3c7-5f07-4be7-aecb-63c575117916">
+      <cim:LoadArea.EnergyConsumer rdf:resource="16b11fe1-b862-468d-b80b-92e946c60ad3"/>
+      <cim:LoadArea.Substation rdf:resource="c60d37cd-bc2e-4d4d-8e0a-5e76d4df6d95"/>
+    </cim:LoadArea>
+    <cim:PowerTransformer rdf:about="6bf4af75-b7cf-41a6-9074-e459e0e8e542">
+      <cim:PowerTransformer.MemberOf_Substation rdf:resource="c60d37cd-bc2e-4d4d-8e0a-5e76d4df6d95"/>
+    </cim:PowerTransformer>
+    <cim:TransformerWinding rdf:about="a523a210-b84d-4153-84c9-0f96db9620d0">
+      <cim:TransformerWinding.ratedMVA>2</cim:TransformerWinding.ratedMVA>
+      <cim:TransformerWinding.ratedKV>10</cim:TransformerWinding.ratedKV>
+      <cim:TransformerWinding.MemberOf_PowerTransformer rdf:resource="6bf4af75-b7cf-41a6-9074-e459e0e8e542"/>
+      <cim:TransformerWinding.windingType rdf:resource="http://iec.ch/TC57/2005/CIM-schema-cim10#WindingType.primary"/>
+    </cim:TransformerWinding>
+    <cim:Location rdf:about="0e3a7598-386d-444d-9908-c2f8a5308aeb">
+      <cim:Location.PowerSystemResource rdf:resource="c60d37cd-bc2e-4d4d-8e0a-5e76d4df6d95"/>
+    </cim:Location>
+    <cim:PositionPoint rdf:about="327b62b7-ed52-4224-95b8-19633fd46851">
+      <cim:Location rdf:resource="0e3a7598-386d-444d-9908-c2f8a5308aeb"/>
+      <cim:PositionPoint.xPosition>455</cim:PositionPoint.xPosition>
+      <cim:PositionPoint.yPosition>5214</cim:PositionPoint.yPosition>
+    </cim:PositionPoint>
+    <cim:Substation rdf:about="3a3ce376-77e6-48b8-8489-71ba99bf83ac">
+      <cim:Naming.name>ТП15357</cim:Naming.name>
+      <cim:Naming.description>3</cim:Naming.description>
+    </cim:Substation>
+    <cim:EnergyConsumer rdf:about="3e8a18af-5c4e-4578-ae86-bf3e6e9b6ea7">
+      <cim:EnergyConsumer.pnom>1</cim:EnergyConsumer.pnom>
+    </cim:EnergyConsumer>
+    <cim:LoadArea rdf:about="5556a1d0-71f6-40d6-96a2-df9a8d238e37">
+      <cim:LoadArea.EnergyConsumer rdf:resource="3e8a18af-5c4e-4578-ae86-bf3e6e9b6ea7"/>
+      <cim:LoadArea.Substation rdf:resource="3a3ce376-77e6-48b8-8489-71ba99bf83ac"/>
+    </cim:LoadArea>
+    <cim:PowerTransformer rdf:about="f97b0464-d9e8-4b7e-b88e-1745f824b37c">
+      <cim:PowerTransformer.MemberOf_Substation rdf:resource="3a3ce376-77e6-48b8-8489-71ba99bf83ac"/>
+    </cim:PowerTransformer>
+    <cim:TransformerWinding rdf:about="cdf18d30-5cef-45e3-a5fe-bb65d524e204">
+      <cim:TransformerWinding.ratedMVA>2</cim:TransformerWinding.ratedMVA>
+      <cim:TransformerWinding.ratedKV>10</cim:TransformerWinding.ratedKV>
+      <cim:TransformerWinding.MemberOf_PowerTransformer rdf:resource="f97b0464-d9e8-4b7e-b88e-1745f824b37c"/>
+      <cim:TransformerWinding.windingType rdf:resource="http://iec.ch/TC57/2005/CIM-schema-cim10#WindingType.primary"/>
+    </cim:TransformerWinding>
+    <cim:Location rdf:about="12bdc0ec-3e71-4721-8cde-d9dc91ea6dc6">
+      <cim:Location.PowerSystemResource rdf:resource="3a3ce376-77e6-48b8-8489-71ba99bf83ac"/>
+    </cim:Location>
+    <cim:PositionPoint rdf:about="6c37d6fc-db14-46d9-8aa4-60b759416edf">
+      <cim:Location rdf:resource="12bdc0ec-3e71-4721-8cde-d9dc91ea6dc6"/>
+      <cim:PositionPoint.xPosition>455</cim:PositionPoint.xPosition>
+      <cim:PositionPoint.yPosition>5214</cim:PositionPoint.yPosition>
+    </cim:PositionPoint>
+    <cim:Substation rdf:about="903bb4e4-5dae-477a-99d6-c9db48fcb040">
+      <cim:Naming.name>ТП15357</cim:Naming.name>
+      <cim:Naming.description>3</cim:Naming.description>
+    </cim:Substation>
+    <cim:EnergyConsumer rdf:about="1a701dce-ff19-4313-aeab-4727fe95027b">
+      <cim:EnergyConsumer.pnom>1</cim:EnergyConsumer.pnom>
+    </cim:EnergyConsumer>
+    <cim:LoadArea rdf:about="c8be212e-8191-4739-b0dc-28ef17e1db68">
+      <cim:LoadArea.EnergyConsumer rdf:resource="1a701dce-ff19-4313-aeab-4727fe95027b"/>
+      <cim:LoadArea.Substation rdf:resource="903bb4e4-5dae-477a-99d6-c9db48fcb040"/>
+    </cim:LoadArea>
+    <cim:PowerTransformer rdf:about="1c089538-6b60-4d83-b889-0f4c33444ddf">
+      <cim:PowerTransformer.MemberOf_Substation rdf:resource="903bb4e4-5dae-477a-99d6-c9db48fcb040"/>
+    </cim:PowerTransformer>
+    <cim:TransformerWinding rdf:about="8bde11b6-d12e-456c-a5dd-8d086a932698">
+      <cim:TransformerWinding.ratedMVA>2</cim:TransformerWinding.ratedMVA>
+      <cim:TransformerWinding.ratedKV>10</cim:TransformerWinding.ratedKV>
+      <cim:TransformerWinding.MemberOf_PowerTransformer rdf:resource="1c089538-6b60-4d83-b889-0f4c33444ddf"/>
+      <cim:TransformerWinding.windingType rdf:resource="http://iec.ch/TC57/2005/CIM-schema-cim10#WindingType.primary"/>
+    </cim:TransformerWinding>
+    <cim:Location rdf:about="4fca1002-b7bb-48d5-91cf-49ed28cc452c">
+      <cim:Location.PowerSystemResource rdf:resource="903bb4e4-5dae-477a-99d6-c9db48fcb040"/>
+    </cim:Location>
+    <cim:PositionPoint rdf:about="29055404-254a-4fe2-a441-f5ad296ff9f2">
+      <cim:Location rdf:resource="4fca1002-b7bb-48d5-91cf-49ed28cc452c"/>
+      <cim:PositionPoint.xPosition>455</cim:PositionPoint.xPosition>
+      <cim:PositionPoint.yPosition>5214</cim:PositionPoint.yPosition>
+    </cim:PositionPoint>
+    <cim:Substation rdf:about="4fa7214a-560b-4042-bd2f-6b398acf74f2">
+      <cim:Naming.name>ТП15357</cim:Naming.name>
+      <cim:Naming.description>3</cim:Naming.description>
+    </cim:Substation>
+    <cim:EnergyConsumer rdf:about="79c8d48c-31ae-4740-975f-463fe5f6d091">
+      <cim:EnergyConsumer.pnom>1</cim:EnergyConsumer.pnom>
+    </cim:EnergyConsumer>
+    <cim:LoadArea rdf:about="40a52c1b-8f5f-467a-8a50-8ee9e690726a">
+      <cim:LoadArea.EnergyConsumer rdf:resource="79c8d48c-31ae-4740-975f-463fe5f6d091"/>
+      <cim:LoadArea.Substation rdf:resource="4fa7214a-560b-4042-bd2f-6b398acf74f2"/>
+    </cim:LoadArea>
+    <cim:PowerTransformer rdf:about="4eba4751-5184-4b74-a5f7-ae67c5b633ed">
+      <cim:PowerTransformer.MemberOf_Substation rdf:resource="4fa7214a-560b-4042-bd2f-6b398acf74f2"/>
+    </cim:PowerTransformer>
+    <cim:TransformerWinding rdf:about="747d174e-70ae-43fe-b706-603c92ab9bc8">
+      <cim:TransformerWinding.ratedMVA>2</cim:TransformerWinding.ratedMVA>
+      <cim:TransformerWinding.ratedKV>10</cim:TransformerWinding.ratedKV>
+      <cim:TransformerWinding.MemberOf_PowerTransformer rdf:resource="4eba4751-5184-4b74-a5f7-ae67c5b633ed"/>
+      <cim:TransformerWinding.windingType rdf:resource="http://iec.ch/TC57/2005/CIM-schema-cim10#WindingType.primary"/>
+    </cim:TransformerWinding>
+    <cim:Location rdf:about="f929faaf-d42c-4eb0-8fe8-1d3e8ace3153">
+      <cim:Location.PowerSystemResource rdf:resource="4fa7214a-560b-4042-bd2f-6b398acf74f2"/>
+    </cim:Location>
+    <cim:PositionPoint rdf:about="acde240a-b9e5-4687-9349-84fd3940bda6">
+      <cim:Location rdf:resource="f929faaf-d42c-4eb0-8fe8-1d3e8ace3153"/>
+      <cim:PositionPoint.xPosition>455</cim:PositionPoint.xPosition>
+      <cim:PositionPoint.yPosition>5214</cim:PositionPoint.yPosition>
+    </cim:PositionPoint>
+    <cim:Substation rdf:about="92cbc0cc-5283-4e2e-a26d-b6a5f7fca948">
+      <cim:Naming.name>ТП15357</cim:Naming.name>
+      <cim:Naming.description>3</cim:Naming.description>
+    </cim:Substation>
+    <cim:EnergyConsumer rdf:about="9454441d-6592-44fa-9b43-4c35b25cadfa">
+      <cim:EnergyConsumer.pnom>1</cim:EnergyConsumer.pnom>
+    </cim:EnergyConsumer>
+    <cim:LoadArea rdf:about="4e2342bf-3190-4f52-9544-5754a3aa9af7">
+      <cim:LoadArea.EnergyConsumer rdf:resource="9454441d-6592-44fa-9b43-4c35b25cadfa"/>
+      <cim:LoadArea.Substation rdf:resource="92cbc0cc-5283-4e2e-a26d-b6a5f7fca948"/>
+    </cim:LoadArea>
+    <cim:PowerTransformer rdf:about="7605225e-306a-4a6f-ba18-55e6043219a9">
+      <cim:PowerTransformer.MemberOf_Substation rdf:resource="92cbc0cc-5283-4e2e-a26d-b6a5f7fca948"/>
+    </cim:PowerTransformer>
+    <cim:TransformerWinding rdf:about="f89b9a36-7171-4bc3-8803-bfde0990f22d">
+      <cim:TransformerWinding.ratedMVA>2</cim:TransformerWinding.ratedMVA>
+      <cim:TransformerWinding.ratedKV>10</cim:TransformerWinding.ratedKV>
+      <cim:TransformerWinding.MemberOf_PowerTransformer rdf:resource="7605225e-306a-4a6f-ba18-55e6043219a9"/>
+      <cim:TransformerWinding.windingType rdf:resource="http://iec.ch/TC57/2005/CIM-schema-cim10#WindingType.primary"/>
+    </cim:TransformerWinding>
+    <cim:Location rdf:about="ef881482-4dee-4460-a754-885f73a50554">
+      <cim:Location.PowerSystemResource rdf:resource="92cbc0cc-5283-4e2e-a26d-b6a5f7fca948"/>
+    </cim:Location>
+    <cim:PositionPoint rdf:about="695e0a10-d95a-49d0-bca3-40081eed5fad">
+      <cim:Location rdf:resource="ef881482-4dee-4460-a754-885f73a50554"/>
+      <cim:PositionPoint.xPosition>455</cim:PositionPoint.xPosition>
+      <cim:PositionPoint.yPosition>5214</cim:PositionPoint.yPosition>
+    </cim:PositionPoint>
+    <cim:Substation rdf:about="62525cf1-6a55-40d0-a60b-e16e7f7d65a0">
+      <cim:Naming.name>ТП15357</cim:Naming.name>
+      <cim:Naming.description>3</cim:Naming.description>
+    </cim:Substation>
+    <cim:EnergyConsumer rdf:about="ebe5076d-8d2d-4694-8dde-f6a4d3307797">
+      <cim:EnergyConsumer.pnom>1</cim:EnergyConsumer.pnom>
+    </cim:EnergyConsumer>
+    <cim:LoadArea rdf:about="19f6e546-b88c-46de-bd67-5e0c60d114d1">
+      <cim:LoadArea.EnergyConsumer rdf:resource="ebe5076d-8d2d-4694-8dde-f6a4d3307797"/>
+      <cim:LoadArea.Substation rdf:resource="62525cf1-6a55-40d0-a60b-e16e7f7d65a0"/>
+    </cim:LoadArea>
+    <cim:PowerTransformer rdf:about="5b401e97-b5af-481b-9de5-45ae5c1e36b2">
+      <cim:PowerTransformer.MemberOf_Substation rdf:resource="62525cf1-6a55-40d0-a60b-e16e7f7d65a0"/>
+    </cim:PowerTransformer>
+    <cim:TransformerWinding rdf:about="05e75401-0344-48b6-857e-d6c0e647a63e">
+      <cim:TransformerWinding.ratedMVA>2</cim:TransformerWinding.ratedMVA>
+      <cim:TransformerWinding.ratedKV>10</cim:TransformerWinding.ratedKV>
+      <cim:TransformerWinding.MemberOf_PowerTransformer rdf:resource="5b401e97-b5af-481b-9de5-45ae5c1e36b2"/>
+      <cim:TransformerWinding.windingType rdf:resource="http://iec.ch/TC57/2005/CIM-schema-cim10#WindingType.primary"/>
+    </cim:TransformerWinding>
+    <cim:Location rdf:about="f644e400-299e-4780-b58a-83e0b0b547e7">
+      <cim:Location.PowerSystemResource rdf:resource="62525cf1-6a55-40d0-a60b-e16e7f7d65a0"/>
+    </cim:Location>
+    <cim:PositionPoint rdf:about="39b4be17-7cfc-4765-86d7-908b04435115">
+      <cim:Location rdf:resource="f644e400-299e-4780-b58a-83e0b0b547e7"/>
+      <cim:PositionPoint.xPosition>455</cim:PositionPoint.xPosition>
+      <cim:PositionPoint.yPosition>5214</cim:PositionPoint.yPosition>
+    </cim:PositionPoint>
+    <cim:Substation rdf:about="becee3b3-82b6-49a4-b454-43ae7c23454e">
+      <cim:Naming.name>ТП15357</cim:Naming.name>
+      <cim:Naming.description>3</cim:Naming.description>
+    </cim:Substation>
+    <cim:EnergyConsumer rdf:about="b0854860-5c74-433b-a897-aec7e54893ed">
+      <cim:EnergyConsumer.pnom>1</cim:EnergyConsumer.pnom>
+    </cim:EnergyConsumer>
+    <cim:LoadArea rdf:about="a7e81e15-957e-42be-a3ec-0921f97ea3cc">
+      <cim:LoadArea.EnergyConsumer rdf:resource="b0854860-5c74-433b-a897-aec7e54893ed"/>
+      <cim:LoadArea.Substation rdf:resource="becee3b3-82b6-49a4-b454-43ae7c23454e"/>
+    </cim:LoadArea>
+    <cim:PowerTransformer rdf:about="973dbb3c-657f-4382-bbd2-a2f39a153f00">
+      <cim:PowerTransformer.MemberOf_Substation rdf:resource="becee3b3-82b6-49a4-b454-43ae7c23454e"/>
+    </cim:PowerTransformer>
+    <cim:TransformerWinding rdf:about="0d607ea0-6c29-48b3-86ff-b9b270152434">
+      <cim:TransformerWinding.ratedMVA>2</cim:TransformerWinding.ratedMVA>
+      <cim:TransformerWinding.ratedKV>10</cim:TransformerWinding.ratedKV>
+      <cim:TransformerWinding.MemberOf_PowerTransformer rdf:resource="973dbb3c-657f-4382-bbd2-a2f39a153f00"/>
+      <cim:TransformerWinding.windingType rdf:resource="http://iec.ch/TC57/2005/CIM-schema-cim10#WindingType.primary"/>
+    </cim:TransformerWinding>
+    <cim:Location rdf:about="33aec350-2264-4a85-bf08-8dac7c5d055b">
+      <cim:Location.PowerSystemResource rdf:resource="becee3b3-82b6-49a4-b454-43ae7c23454e"/>
+    </cim:Location>
+    <cim:PositionPoint rdf:about="c74cdb6d-edd4-425b-8d56-346aecbce96f">
+      <cim:Location rdf:resource="33aec350-2264-4a85-bf08-8dac7c5d055b"/>
+      <cim:PositionPoint.xPosition>455</cim:PositionPoint.xPosition>
+      <cim:PositionPoint.yPosition>5214</cim:PositionPoint.yPosition>
+    </cim:PositionPoint>
   </md:FullModel>
 </rdf:RDF>
